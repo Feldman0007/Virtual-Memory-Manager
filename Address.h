@@ -1,8 +1,9 @@
 #pragma once
 #ifndef ADDRESS_H
 #define ADDRESS_H
-#define ADDRESS_MASK 0xFFFF
-#define OFFSET_MASK 0xFFFF
+
+#include "PageTable.h"
+
 
 class Address {
 private:
@@ -11,12 +12,17 @@ private:
 	int frameNumber;
 
 public:
-	int store();
-	int getFrame(int);
-	int getPageNum(); //return pageNumber
-	int getoffset();
-    int setOffset(int newOffset);
-    
+
+	//int store();
+	
+	void setOffset(int); 
+	void setPageNum(int);
+	//void setFrameNum(int);
+	//int getFrameNum();
+	int getPageNum();
+	int getOffset();
+
+	//void storeToTables(int );
 };
 
 #endif

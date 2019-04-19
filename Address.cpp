@@ -1,13 +1,44 @@
 #include "Address.h"
-#define ADDRESS_MASK 0xFFFF
-#define OFFSET_MASK 0xFFFF
 
+
+//save offset
+void Address::setOffset(int d)
+{ 
+	pageOffset = d;
+}
+
+//save pageNUm
+void Address::setPageNum(int p)
+{
+	pageNumber = p;
+}
+
+//return pageNumber
 int Address::getPageNum()
-{
-	return ((pageOffset & ADDRESS_MASK) >> 8);
+{ 
+	return pageNumber; 
+} 
+
+//return offset
+int Address::getOffset()
+{ 
+	return pageOffset; 
 }
 
-int Address::getoffset()
+
+/*
+void setFrameNum(int a)
 {
-	return (pageOffset & OFFSET_MASK);
+	frameNumber = a;
 }
+int getFrameNum()
+{
+	return frameNumber;
+}
+
+
+void storeToTables(int){
+
+}
+
+*/

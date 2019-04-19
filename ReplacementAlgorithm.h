@@ -3,7 +3,8 @@
 #define REPLACEMENTALGORITHM_H
 
 class ReplacementAlgorithm {
-
+private:
+public:
 
 };
 

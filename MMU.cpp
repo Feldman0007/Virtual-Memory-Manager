@@ -1,17 +1,28 @@
-#ifndef MMU_H
-#define MMU_H
+#include "MMU.h"
+#define ADDRESS_MASK 0xFFFF
+#define OFFSET_MASK 0xFF
 
 
-class MMU (int argc, char* argv) {
-private:
+//void getPhysicalA(string file) { ; }
+Address MMU::processAddress(string strAddr) {
+	// convert input string to int and get its address
+	stringstream convertToInt;
+	convertToInt << strAddr;
+	int intAddress;
+	convertToInt >> intAddress;
 
+	int intOffset = intAddress; //need to store original address twice so we can mask and seperate offset and page number
+	int intPageNum = intAddress;
 
-public:
+	//mask to get the offset  
+	//mask to get pagenumber 
+	intPageNum = ((intPageNum & ADDRESS_MASK) >> 8);
+	intOffset = intOffset & OFFSET_MASK;
 
+	// int page number = mask bits
+	tempAddress.setOffset(intOffset);
+	tempAddress.setPageNum(intPageNum);
 
-
-};
-
-
-
-#endif;
+	return tempAddress;
+}
+	

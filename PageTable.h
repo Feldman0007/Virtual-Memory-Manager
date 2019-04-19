@@ -4,16 +4,23 @@
 #ifndef PAGETABLE_H
 #define PAGETABLE_H
 
+#include "Address.h"
+#include "ReplacementAlgorithm.h"
+/*
+class PageReplacementAlgorithm : public ReplacementAlgorithm {
+
+};
+*/
+
 class PageTable {
 private:
 	int pageTable[PAGE_TABLE_SIZE];
 
+
 public:
 	bool isFull();
-	
-
-
-
+	int pageTableLookup(int);
+	void storePageNum(); 
 };
 
 #endif

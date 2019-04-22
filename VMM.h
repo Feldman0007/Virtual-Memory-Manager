@@ -24,9 +24,11 @@ private:
 
 public:
 	void processInput(string);
-	int getFrameNumber(int);
 	void setAddress(Address);
 	void print(); 
+	void setTable(PageTable);
+	void print2();
+	//int getFrameNumber(int);
 	//create overarching function later?
 }; 
 

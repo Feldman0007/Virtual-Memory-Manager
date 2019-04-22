@@ -5,6 +5,9 @@ void VMM::processInput(string strAddr)
 	Address tempAddress = mmu.processAddress(strAddr);	
 	setAddress(tempAddress);
 
+	PageTable table;
+	table.storePageNum(tempAddress.getPageNum());
+	setTable(table);
 }
 /*
 int VMM::getFrameNumber(int pageNum)
@@ -21,4 +24,15 @@ void VMM::setAddress(Address address) {
 void VMM::print() {
 	cout << "CurrentAddress --> Offset " << currentAddress.getOffset() << endl;
 	cout << "CurrentAddress --> PageNum " << currentAddress.getPageNum() << endl;
+
+
+}
+void VMM::setTable(PageTable trial)
+{
+	pageTable = trial;
+}
+
+void VMM::print2()
+{
+	pageTable.printPage();
 }

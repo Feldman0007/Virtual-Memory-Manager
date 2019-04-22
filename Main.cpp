@@ -29,7 +29,10 @@ int main() {
 		// 3) Replace the page number p in the logical address with the frame number f.
 		// 4) Use that physical address to locate the and output the value of the byte stored in RAM
 		// 5) Convert to hex to print 
-	}
+		virtualMemoryManager.print();
+
+	}	
+	virtualMemoryManager.print2();
 
 	fileReader.close();
 	system("PAUSE");

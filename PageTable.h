@@ -3,6 +3,9 @@
 #define PAGE_SIZE 256
 #ifndef PAGETABLE_H
 #define PAGETABLE_H
+#include <iostream>
+
+using namespace std;
 
 #include "Address.h"
 #include "ReplacementAlgorithm.h"
@@ -18,9 +21,8 @@ private:
 
 
 public:
-	bool isFull();
-	int pageTableLookup(int);
-	void storePageNum(); 
+	void storePageNum(int );
+	void printPage();
 };
 
 #endif

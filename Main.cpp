@@ -8,18 +8,18 @@ using namespace std;
 int main() {
 
 	//filename
-	string filename = "Addresses.txt";
+	string filename = "Addresses.txt";//remove later
 
-	ifstream fileReader;
-	fileReader.open(filename);
+	ifstream fileReader;//remove later
+	fileReader.open(filename);//remove later
 
 	//Each time we read we call mmu to convert logical to physical 
 	
 	
-	VMM virtualMemoryManager; // Virtually memory manager is our over arching class that encompasses all domain objects of a virtual memory manager
+	VMM virtualMemoryManager; // Virtually memory manager is our over arching class that includes all working peices of a virtual memory manager
 	string input; //remove later
 
-	//logicalAddress.setAddress(address);
+	
 
 	while (fileReader >> input) {
 		virtualMemoryManager.processInput(input);	
@@ -29,7 +29,10 @@ int main() {
 		// 3) Replace the page number p in the logical address with the frame number f.
 		// 4) Use that physical address to locate the and output the value of the byte stored in RAM
 		// 5) Convert to hex to print 
-	}
+		virtualMemoryManager.print();
+
+	}	
+	virtualMemoryManager.print2();
 
 	fileReader.close();
 	system("PAUSE");

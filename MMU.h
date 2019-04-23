@@ -12,7 +12,6 @@ using namespace std;
 
 class MMU { 
 private:
-	Address tempAddress;
 public: 
 	//void getPhysicalA(string file) { ; }
 	Address processAddress(string);

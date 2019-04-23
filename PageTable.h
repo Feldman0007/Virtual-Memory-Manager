@@ -3,8 +3,12 @@
 #define PAGE_SIZE 256
 #ifndef PAGETABLE_H
 #define PAGETABLE_H
+#include <iostream>
+
+using namespace std;
 
 #include "Address.h"
+#include "PageTableEntry.h"
 #include "ReplacementAlgorithm.h"
 /*
 class PageReplacementAlgorithm : public ReplacementAlgorithm {
@@ -14,13 +18,11 @@ class PageReplacementAlgorithm : public ReplacementAlgorithm {
 
 class PageTable {
 private:
-	int pageTable[PAGE_TABLE_SIZE];
-
+	PageTableEntry pageTable[PAGE_TABLE_SIZE]; 
+	//PageReplacementAlgorithm 
 
 public:
-	bool isFull();
-	int pageTableLookup(int);
-	void storePageNum(); 
+	void pageTableLookup(int);
 };
 
 #endif

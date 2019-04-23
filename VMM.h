@@ -13,7 +13,7 @@
 
 class VMM {
 private:
-	Address currentAddress;
+	Address currentAddress; // The address we are currently working with
 	MMU mmu;
 	PageTable pageTable;
 	RAM ram;
@@ -24,9 +24,8 @@ private:
 
 public:
 	void processInput(string);
-	int getFrameNumber(int);
-	void setAddress(Address);
-	void print(); 
+	void print();
+	//int getFrameNumber(int);
 	//create overarching function later?
 }; 
 

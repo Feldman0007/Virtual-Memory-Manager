@@ -9,7 +9,7 @@ class Address {
 private:
 	int pageNumber;
 	int pageOffset;
-	int frameNumber;
+	//int frameNumber;
 
 public:
 
@@ -18,10 +18,10 @@ public:
 	void setOffset(int); 
 	void setPageNum(int);
 	//void setFrameNum(int);
-	//int getFrameNum();
+	
 	int getPageNum();
 	int getOffset();
-
+	//int getFrameNum();
 	//void storeToTables(int );
 };
 

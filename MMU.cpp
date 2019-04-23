@@ -5,21 +5,19 @@
 
 //void getPhysicalA(string file) { ; }
 Address MMU::processAddress(string strAddr) {
-	// convert input string to int and get its address
-	stringstream convertToInt;
-	convertToInt << strAddr;
+	
+	Address tempAddress;
+	stringstream convertToInt;// convert string input to int so we can work with the logical address
 	int intAddress;
+	convertToInt << strAddr;
 	convertToInt >> intAddress;
 
-	int intOffset = intAddress; //need to store original address twice so we can mask and seperate offset and page number
+	int intOffset = intAddress; //need temporary copies for masking and seperating page number and offset 
 	int intPageNum = intAddress;
 
-	//mask to get the offset  
-	//mask to get pagenumber 
-	intPageNum = ((intPageNum & ADDRESS_MASK) >> 8);
-	intOffset = intOffset & OFFSET_MASK;
+	intPageNum = ((intPageNum & ADDRESS_MASK) >> 8);//mask bits to isolate pagenumber   
+	intOffset = intOffset & OFFSET_MASK; //mask bits to isolate offset
 
-	// int page number = mask bits
 	tempAddress.setOffset(intOffset);
 	tempAddress.setPageNum(intPageNum);
 

@@ -1,28 +1,39 @@
 #include "Address.h"
 
 
-//save offset
-void Address::setOffset(int d)
+
+void Address::setDisplacement(int d) //store offset
 { 
 	pageOffset = d;
 }
 
-//save pageNUm
-void Address::setPageNum(int p)
+
+void Address::setPage(int p) //store pageNUm
 {
 	pageNumber = p;
 }
 
-//return pageNumber
-int Address::getPageNum()
+void Address::setFrame(int f) {
+	frameNumber = f;
+}
+
+int Address::getPage()//return pageNumber
 { 
 	return pageNumber; 
 } 
 
-//return offset
-int Address::getOffset()
+int Address::getDispacement()//return offset
 { 
 	return pageOffset; 
+}
+
+int Address::getFrame()
+{
+	return 0;
+}
+
+uint32_t Address::getAddress() {
+	return logicalAddress;
 }
 
 

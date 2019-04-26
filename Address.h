@@ -2,27 +2,26 @@
 #ifndef ADDRESS_H
 #define ADDRESS_H
 
-#include "PageTable.h"
-
+#include <sstream>
+#include <iostream>
+using namespace std;
 
 class Address {
 private:
+	uint32_t logicalAddress;
 	int pageNumber;
 	int pageOffset;
-	//int frameNumber;
+	int frameNumber;
 
 public:
-
-	//int store();
+	void setPage(int);
+	void setDisplacement(int);
+	void setFrame(int);
 	
-	void setOffset(int); 
-	void setPageNum(int);
-	//void setFrameNum(int);
-	
-	int getPageNum();
-	int getOffset();
-	//int getFrameNum();
-	//void storeToTables(int );
+	uint32_t getAddress();
+	int getPage();
+	int getDispacement();
+	int getFrame();
 };
 
 #endif

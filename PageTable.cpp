@@ -1,27 +1,20 @@
 #include "PageTable.h"
 
-/*
-int pageTableLookup(int){
-	return 0;
-}
-
-*/
 
 
-void PageTable::pageTableLookup(int a)
+bool PageTable::pageTableLookup(int pageNum)
 {
-	if (pageTable[a].getValidBit()) { // if there is no mapped frame to our logical address
-		PageTableEntry nextEntry; //create new Page Table entry  
-		// trap and go to backing store
-		// get frame number
-		//nextEntry.populatePageEntry(frameNum, false);
-		
-		// nextEntry.setValidBit();
-		// pageTable[a] = nextEntry
+	if (!pageTable[pageNum].getValidBit()) { // if the invalid bit is there is no mapped frame to our logical address
+		return false; // use backing store
 	}
-	else { //valid address
-		  //get frame number right away
+	else { //valid bit set, the page has already been loaded into memory
+		return true; 
 	}
-	;
-	
+}
+void PageTable::updatePageTable(Address addr) {
+	pageTable[addr.getPage()].updatePageEntry(/*values returned from pageIn*/);
+
+}
+PageTableEntry PageTable::getEntry(int index){
+	return pageTable[index];
 }

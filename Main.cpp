@@ -5,38 +5,53 @@
 
 using namespace std;
 
+struct headers {
+	unsigned int totalFrames;
+};
+
 int main() {
 
 	//filename
-	string filename = "Addresses.txt";//remove later
+	string filename = "addresses.txt";//remove later
 
 	ifstream fileReader;//remove later
 	fileReader.open(filename);//remove later
 
 	//Each time we read we call mmu to convert logical to physical 
 	
-	
-	VMM virtualMemoryManager; // Virtually memory manager is our over arching class that includes all working peices of a virtual memory manager
+	VMM virtualMemoryManager;
 	string input; //remove later
 
-	
+	ifstream binaryFileReader;
+	binaryFileReader.open("BACKING_STORE.bin", ios::in | ios::binary);
 
-	while (fileReader >> input) {
-		virtualMemoryManager.processInput(input);	
-		//Process is the primary function of VMM input is will:
-		// 1) Extract page number p so we may use it to index into the page table
-		// 2) Use the page number p to index into the page table to retreive frame number f 
-		// 3) Replace the page number p in the logical address with the frame number f.
-		// 4) Use that physical address to locate the and output the value of the byte stored in RAM
-		// 5) Convert to hex to print 
-		virtualMemoryManager.print();
+	if (!binaryFileReader) {
+		cout << "Error Opening File " << endl;
+		return -1;
+	}
 
-	}	
-	virtualMemoryManager.print2();
+	headers test;
+	binaryFileReader.seekg(60 * 256 + 20, ios::beg);
+	binaryFileReader.read((char*)& test, sizeof(test));
+	cout << test.totalFrames << endl;
+
+	//while (fileReader >> input) {
+	//	virtualMemoryManager.processInput(input);	
+	//	//Process is the primary function of VMM input is will:
+	//	// 1) Extract page number p so we may use it to index into the page table
+	//	// 2) Use the page number p to index into the page table to retreive frame number f 
+	//	// 3) Replace the page number p in the logical address with the frame number f.
+	//	// 4) Use that physical address to locate the and output the value of the byte stored in RAM
+	//	// 5) Convert to hex to print 
+	//	virtualMemoryManager.print();
+
+	//}	
+
 
 	fileReader.close();
 	system("PAUSE");
 	return 0;
+
 	/*
 		std::ifstream infile("address.txt");
 		int a;
@@ -89,15 +104,5 @@ void hexConvertion(int address)
 
 */
 
-/*
-Use at TLB
-	1. FIFO
-		2nd chance/enhanced 2nd chance
-	2. LRU
-	3. MFU
-	4. LFU
-
-
-*/
 
 

@@ -9,24 +9,31 @@
 #include "Address.h"
 
 //#include "ReplacmentAlgorithm.h"
-//#include "BackingStore.h"
+//Virtual memory manager is our over arching class that includes all working peices of a virtual memory manager
 
 class VMM {
 private:
-	Address currentAddress; // The address we are currently working with
 	MMU mmu;
-	PageTable pageTable;
+	PageTable pgTable;
 	RAM ram;
 	TLB tlb;
+	Word data; // The byte of memory retreived from physical memory
+	bool freeFramesList[256] = {true};
+	
 	//ReplacementAlgorithm replacementAlgorithm;
 	//BackingStore backingStore;
 
+	
 
 public:
+	void pageFaultRoutine();
 	void processInput(string);
 	void print();
+	int checkAvailable(); // maybe return a struct with status
+	void updateAvailability(int);
+
 	//int getFrameNumber(int);
-	//create overarching function later?
 }; 
 
 #endif
+

@@ -8,7 +8,7 @@
 #include "RAM.h"
 #include "PageTable.h"
 #include "Word.h"
-
+#include "TLB.h"
 using namespace std;
 
 #ifndef MMU_H
@@ -17,20 +17,29 @@ using namespace std;
 class MMU { 
 private:
 	Address currentAddress; // The address we are currently working with
-	
-	BackingStore backingStore;
+	TLB tlb;
 
-	uint32_t page_access_count_;
-	uint32_t page_in_faults_;
-	uint32_t tlb_access_count_;
-	uint32_t tlb_faults_;
+	int page_access_count;
+	int page_in_faults;
+	int tlb_access_count;
+	int tlb_faults;
 	
 public: 
-	//void getPhysicalA(string file) { ; }
-	void processAddress(string);
-	void pageIn();
+	MMU();
+	void processAddress(int);
 	Address getAddress();
-	uint32_t word;
+	
+	bool checkTLB(int);
+	int retrieveFrame(int);
+	void updateTLB(int, int);
+
+	void update_page_access_count();
+	void update_page_in_faults();
+	void update_tlb_access_count();
+	void update_tlb_faults();
+
+	void calculateTLBRate();
+	void calculatePageFaultRate();
 	//call function in page table to convert 
 };
 

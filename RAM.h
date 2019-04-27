@@ -5,13 +5,17 @@
 #define RAM_SIZE 256
 
 #include <iostream>
+#include <iomanip>
+
+using namespace std;
 
 class RAM {
 private:
-	uint32_t physicalMemory[RAM_SIZE];
+	char physicalMemory[RAM_SIZE][FRAME_SIZE];
 
 public:
-	void store(int, uint32_t);
+	void store(int, char *);
+	void print(int, int);
 };
 
 #endif

@@ -3,22 +3,19 @@
 
 
 BackingStore::BackingStore() {
-	binaryFileReader.open("BACKING_STORE.bin", ios::in | ios::binary | ios::trunc);
+	binaryFileReader.open("BACKING_STORE.bin", ios::binary | ios::in);
 	if (binaryFileReader.fail()) {
-			cout << "Error Opening File " << endl;
+			cout << "Error Opening backing_store " << endl;
 			system("PAUSE");
 	}
 }
 
-uint32_t BackingStore::read(int pageNum, int offSet) {
-	uint32_t data;
-	binaryFileReader.seekg(pageNum * FRAME_SIZE + offSet);
-	binaryFileReader.read((char*)& data, sizeof(FRAME_SIZE));
-	return data; 
+char * BackingStore::read(int pageNum) {
+	binaryFileReader.seekg(pageNum * FRAME_SIZE);
+	binaryFileReader.read(dataBuffer, FRAME_SIZE);
+	return dataBuffer; 
 }
-
 
 BackingStore::~BackingStore() {
 	binaryFileReader.close();
 }
-

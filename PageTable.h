@@ -10,22 +10,17 @@ using namespace std;
 
 #include "Address.h"
 #include "ReplacementAlgorithm.h"
-/*
-class LRUPageReplacementAlgorithm : public ReplacementAlgorithm {
 
-};
-*/
 struct PageTableEntry {
 	int frameNumber;
-	bool valid_invalid_bit ;// false = page not yet loaded into physical memory
+	bool valid_invalid_bit;
 	
 	PageTableEntry() {
-		frameNumber = -1; // initially -1, null pointer, not yet mapped to physical address 
-		valid_invalid_bit = false; // false = invalid, page not loaded into memory
+		valid_invalid_bit = false; // false = page not yet loaded into physical memory
 	}
-	void updatePageEntry(int frameNum, bool validBit) {
-		frameNumber = frameNum;
-		valid_invalid_bit = validBit;
+	void updatePageEntry(int frame) {
+		frameNumber = frame;
+		valid_invalid_bit = true;
 	}
 	int getFrameNumber() {
 		return frameNumber;
@@ -38,11 +33,12 @@ struct PageTableEntry {
 class PageTable {
 private:
 	PageTableEntry pageTable[PAGE_TABLE_SIZE]; 
-	//PageReplacementAlgorithm 
+	ReplacementAlgorithm replacementAlgorithm;
 
 public:
 	bool pageTableLookup(int);
+	int getFrame(int);
 	PageTableEntry getEntry(int);
-	void updatePageTable(Address);
+	void updatePageTable(int, int);
 };
 #endif

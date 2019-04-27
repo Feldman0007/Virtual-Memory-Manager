@@ -8,20 +8,18 @@ using namespace std;
 
 class Address {
 private:
-	uint32_t logicalAddress;
 	int pageNumber;
-	int pageOffset;
-	int frameNumber;
+	int pageOffset;	
+	int logicalAddress;
 
 public:
+	void setLogicalAddress(int);
+	int getAddress();
 	void setPage(int);
 	void setDisplacement(int);
-	void setFrame(int);
-	
-	uint32_t getAddress();
 	int getPage();
-	int getDispacement();
-	int getFrame();
+	int getDispacement();	
+
 };
 
 #endif

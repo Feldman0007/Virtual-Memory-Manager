@@ -10,10 +10,11 @@ using namespace std;
 class BackingStore {
 private: 
 	ifstream binaryFileReader;
+	char dataBuffer[FRAME_SIZE];
 public:
 	BackingStore();
 	~BackingStore();
-	uint32_t read(int, int);
+	char * read(int);
 };
 #endif
 

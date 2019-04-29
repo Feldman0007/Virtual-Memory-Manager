@@ -9,16 +9,40 @@
 class TLBReplacementAlgorithm : public ReplacementAlgorithm {
 };
 */
-class TLB {
-	private:
-		//ReplacementAlgorithm replacementAlgorithm;
+struct TLBEntry {
+	int frameNum;
+	int pageNum;
+	bool isAvailable;
 
-		//Array of tlb page table
-		//int translationLookasideBuffer[TLB_SIZE];
+	int useTime;
+
+	void updateTLBEntry(int frame, int page) {
+		frameNum = frame;
+		pageNum = page;
+		useTime = 0;
+		isAvailable = false;
+	}
+	int getFrame() {
+		return frameNum;
+	}
+	int getPage() {
+		return pageNum;
+	}
+};
+
+
+class TLB{
+	private:
+		TLBEntry translationLookAsideBuffer[TLB_SIZE];								//ReplacementAlgorithm replacementAlgorithm;
+		int numTLBEntries;
+		ReplacementAlgorithm algorithm;
 
 	public:
-		//int tlbLookup;
-		//bool isFull;
+		TLB();
+		bool hit(int);
+		int findAvailableSpot();
+		void update(int, int, int);
+		int tlbGetFrame(int);
 };
 
 #endif

@@ -1,44 +1,29 @@
 #include "Address.h"
 
-
-//save offset
-void Address::setOffset(int d)
+void Address::setDisplacement(int d) //store offset
 { 
 	pageOffset = d;
 }
 
-//save pageNUm
-void Address::setPageNum(int p)
+void Address::setPage(int p) //store pageNUm
 {
 	pageNumber = p;
 }
 
-//return pageNumber
-int Address::getPageNum()
+int Address::getPage()//return pageNumber
 { 
 	return pageNumber; 
 } 
 
-//return offset
-int Address::getOffset()
+int Address::getDispacement()//return offset
 { 
 	return pageOffset; 
 }
 
-
-/*
-void setFrameNum(int a)
-{
-	frameNumber = a;
-}
-int getFrameNum()
-{
-	return frameNumber;
+int Address::getAddress() {
+	return logicalAddress;
 }
 
-
-void storeToTables(int){
-
+void Address::setLogicalAddress(int intAddr){
+	logicalAddress = intAddr;
 }
-
-*/

@@ -5,31 +5,30 @@
 #include "MMU.h"
 #include "PageTable.h"
 #include "RAM.h"
-#include "TLB.h"
-#include "Address.h"
+#include "BackingStore.h"
+#include <iomanip>
 
-//#include "ReplacmentAlgorithm.h"
-//#include "BackingStore.h"
+
+
+//Virtual memory manager is our over arching class that includes all working peices of a virtual memory manager
 
 class VMM {
 private:
-	Address currentAddress;
 	MMU mmu;
-	PageTable pageTable;
+	PageTable pgTable;
 	RAM ram;
-	TLB tlb;
-	//ReplacementAlgorithm replacementAlgorithm;
-	//BackingStore backingStore;
-
+	BackingStore backingStore; 
+	bool freeFramesList[256];
+	int numLogic = 0;
 
 public:
-	void processInput(string);
-	void setAddress(Address);
-	void print(); 
-	void setTable(PageTable);
-	void print2();
-	//int getFrameNumber(int);
-	//create overarching function later?
+	VMM();
+	char* pageIn();
+	void pageFaultRoutine();
+	void processInput(int);
+	int findAvailableFrame();
+	void print();
 }; 
 
 #endif
+

@@ -8,14 +8,16 @@
 
 using namespace std;
 
-#include "Address.h"
 #include "ReplacementAlgorithm.h"
 
 struct PageTableEntry {
 	int frameNumber;
+	bool dirtyBit;
 	bool valid_invalid_bit;
 	
 	PageTableEntry() {
+		frameNumber = -999;	
+		dirtyBit = false;
 		valid_invalid_bit = false; // false = page not yet loaded into physical memory
 	}
 	void updatePageEntry(int frame) {
@@ -33,7 +35,6 @@ struct PageTableEntry {
 class PageTable {
 private:
 	PageTableEntry pageTable[PAGE_TABLE_SIZE]; 
-	ReplacementAlgorithm replacementAlgorithm;
 
 public:
 	bool pageTableLookup(int);

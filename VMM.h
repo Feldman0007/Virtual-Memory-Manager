@@ -14,8 +14,9 @@
 
 class VMM {
 private:
+	Address currentAddress;
 	MMU mmu;
-	PageTable pgTable;
+	PageTable page_table;
 	RAM ram;
 	BackingStore backingStore; 
 	bool freeFramesList[256];

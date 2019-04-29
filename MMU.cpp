@@ -3,8 +3,6 @@
 #define ADDRESS_MASK 0xFFFF
 #define OFFSET_MASK 0xFF
 
-//void getPhysicalA(string file) { ; }
-
 MMU::MMU() {
 	int page_access_count_  = 0;
 	int page_in_faults_		= 0;
@@ -12,33 +10,28 @@ MMU::MMU() {
 	int tlb_faults_			= 0;
 }
 
-void MMU::processAddress(int intAddr) {
+void MMU::processAddress(int intAddr, Address &current) {
 	int intOffset;
 	int intPageNum;
 
-	intPageNum = ((intAddr & ADDRESS_MASK) >> 8);						 //mask to get pagenumber 
+	intPageNum = ((intAddr & ADDRESS_MASK) >> 8);						 //mask to get page number 
 	intOffset = intAddr & OFFSET_MASK; 									 //mask to get the offset  
 
-	currentAddress.setDisplacement(intOffset);
-	currentAddress.setPage(intPageNum);
-	currentAddress.setLogicalAddress(intAddr);
-}
-
-Address MMU::getAddress(){
-	return currentAddress;
+	current.setDisplacement(intOffset);
+	current.setPage(intPageNum);
+	current.setLogicalAddress(intAddr);
 }
 
 bool MMU::checkTLB(int pageNum) {
 	return tlb.hit(pageNum);
-
 }
 
 void MMU::updateTLB(int frameNum, int pageNum) {
-	tlb.update(tlb.findAvailableSpot(), frameNum, pageNum);
+	tlb.update(frameNum, pageNum);
 }
 
-int MMU::retrieveFrame(int pageNum){
-	return tlb.tlbGetFrame(pageNum);
+int MMU::getFrameTLB(int pageNum){
+	return tlb.getFrameTLBEntry(pageNum);
 }
 
 void MMU::update_page_access_count(){

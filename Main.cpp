@@ -5,9 +5,7 @@
 
 using namespace std;
 
-struct headers {
-	unsigned int totalFrames;
-};
+
 
 int main() {
 	

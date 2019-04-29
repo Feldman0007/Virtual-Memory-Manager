@@ -3,11 +3,7 @@
 #include <string>
 #include <sstream>
 
-#include "BackingStore.h"
 #include "Address.h"
-#include "RAM.h"
-#include "PageTable.h"
-#include "Word.h"
 #include "TLB.h"
 using namespace std;
 
@@ -16,7 +12,6 @@ using namespace std;
 
 class MMU { 
 private:
-	Address currentAddress; // The address we are currently working with
 	TLB tlb;
 
 	int page_access_count;
@@ -26,11 +21,10 @@ private:
 	
 public: 
 	MMU();
-	void processAddress(int);
-	Address getAddress();
+	void processAddress(int, Address&);
 	
 	bool checkTLB(int);
-	int retrieveFrame(int);
+	int getFrameTLB(int);
 	void updateTLB(int, int);
 
 	void update_page_access_count();
@@ -40,7 +34,6 @@ public:
 
 	void calculateTLBRate();
 	void calculatePageFaultRate();
-	//call function in page table to convert 
 };
 
 

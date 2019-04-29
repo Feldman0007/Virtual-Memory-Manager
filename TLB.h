@@ -5,6 +5,7 @@
 
 #include "ReplacementAlgorithm.h"
 
+using namespace std;
 /*
 class TLBReplacementAlgorithm : public ReplacementAlgorithm {
 };
@@ -12,12 +13,21 @@ class TLBReplacementAlgorithm : public ReplacementAlgorithm {
 struct TLBEntry{
 	int frameNum;
 	int pageNum;
+	int useTime;
 	bool isAvailable;
-	//int time;
 
-	void updateTLBEntry(int frame, int page) {
-		frameNum = frame;
-		pageNum = page;
+
+	TLBEntry() {
+		frameNum = -999;
+		pageNum = -999;
+		useTime = 0;
+		isAvailable = true;
+	}
+	void updateTLBEntry(int f, int p) {
+		frameNum = f;
+		pageNum = p;
+		isAvailable = false;
+		useTime = 0;
 	}
 	int getFrame() {
 		return frameNum;
@@ -31,16 +41,17 @@ struct TLBEntry{
 class TLB {
 	private:
 		TLBEntry translationLookAsideBuffer[TLB_SIZE];
-		int minTime;												//for quicker algorithm
-		bool isFull;
+		TLBReplacementAlgorithm algorithm;
+		int numTLBEntries;
 																	//ReplacementAlgorithm replacementAlgorithm;
 
 		//int translationLookasideBuffer[TLB_SIZE];
 	public:
+		TLB();
 		bool hit(int);
 		int findAvailableSpot();
-		void update(int, int, int);
-		int tlbGetFrame(int);
+		void update(int, int);
+		int getFrameTLBEntry(int);
 };
 
 #endif

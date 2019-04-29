@@ -34,7 +34,7 @@ bool MMU::checkTLB(int pageNum) {
 }
 
 void MMU::updateTLB(int frameNum, int pageNum) {
-	tlb.updateTLB(tlb.findAvailableSpot(), frameNum, pageNum);
+	tlb.update(tlb.findAvailableSpot(), frameNum, pageNum);
 }
 
 int MMU::retrieveFrame(int pageNum){

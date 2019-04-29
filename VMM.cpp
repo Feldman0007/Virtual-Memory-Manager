@@ -19,7 +19,7 @@ void VMM::processInput(int intAddr) {
 	mmu.update_tlb_access_count();
 	if (mmu.checkTLB(pageNum)) {														//if we have a TLB hit
 		ram.print(mmu.retrieveFrame(pageNum), mmu.getAddress().getDispacement());		//access RAM and output using frame number provided by the TLB
-		mmu.updateTLB
+		mmu.updateTLB(mmu.retrieveFrame(pageNum), mmu.getAddress().getDispacement());
 	}	
 	else {																				//else we have a tlb miss, look in the page table			
 																						//store the page in TLB as we are about to

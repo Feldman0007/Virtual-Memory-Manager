@@ -6,7 +6,7 @@
 #include "PageTable.h"
 #include "RAM.h"
 #include "BackingStore.h"
-#include "ReplacementAlgorithm.h"
+#include "PageReplacementAlgorithm.h"
 #include <iomanip>
 
 

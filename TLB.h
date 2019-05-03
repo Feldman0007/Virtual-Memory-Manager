@@ -2,8 +2,7 @@
 #ifndef TLB_H
 #define TLB_H
 #define TLB_SIZE 16
-
-#include "ReplacementAlgorithm.h"
+#include "TLBReplacementAlgorithm.h"
 
 struct TLBEntry {
 	int frameNum;
@@ -25,7 +24,6 @@ struct TLBEntry {
 	}
 };
 
-
 class TLB{
 	private:
 		TLBEntry entries[TLB_SIZE];					//entries is an array of TLB entries. 
@@ -37,7 +35,7 @@ class TLB{
 		bool hit(int);
 		int findAvailableSpot();					//returns the first available spot in the tlb. returns sentinel value -1 if tlb is full. 
 		void update(int, int, int);					
-		int retrieveFrame(int);						
+		int retrieveFrame(int);		
 };	
 
 #endif

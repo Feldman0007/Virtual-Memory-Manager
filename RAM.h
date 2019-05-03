@@ -9,19 +9,9 @@
 
 using namespace std;
 
-class RAM {
-private:
-	char physicalMemory[RAM_SIZE][FRAME_SIZE];
-	Status frameStatuses[RAM_SIZE];																	 //parallel array storing status information for each frame.
-public:
-	void store(int, char *);																		 //store a frame of data in ram; from the backing store
-	int access(int, int);																			 //access RAM using physical address and return byte of data
-	int getUseTime(int);
-};
-
 struct Status {
 	bool accessed;
-	bool dirty;  
+	bool dirty;
 	int useTime; //used in LRU algorithm
 
 	Status() {
@@ -29,6 +19,16 @@ struct Status {
 		dirty = false;
 		useTime = 0;
 	}
+};
+
+class RAM {
+private:
+	char physicalMemory[RAM_SIZE][FRAME_SIZE];														 //volatile physical memory
+	Status frameStatuses[RAM_SIZE];																	 //parallel array storing status information for each frame.
+public:
+	void store(int, char *);																		 //store a frame of data in ram; from the backing store
+	int access(int, int);																			 //access RAM using physical address and return byte of data
+	int getUseTime(int);
 };
 
 #endif

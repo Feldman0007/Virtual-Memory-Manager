@@ -9,7 +9,6 @@
 using namespace std;
 
 #include "Address.h"
-#include "ReplacementAlgorithm.h"
 
 struct PageTableEntry {
 	int frameNumber;

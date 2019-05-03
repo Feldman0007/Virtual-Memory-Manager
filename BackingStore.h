@@ -19,7 +19,7 @@ public:
 #endif
 
 
-////int fetchPage(const &pageNumber)
+///int fetchPage(const &pageNumber)
 //string filename = "BACKING_STORE.bin";//remove later
 //ifstream binaryFileReader;//remove later
 

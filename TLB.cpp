@@ -1,6 +1,7 @@
 #include "TLB.h"
 
 TLB::TLB() {
+	
 	numTLBEntries = 0;
 }
 
@@ -48,6 +49,7 @@ int TLB::findAvailableSpot(){
 				return i;
 			}
 		}
+		return -1;
 	}
 }
 int TLB::retrieveFrame(int pageNum){

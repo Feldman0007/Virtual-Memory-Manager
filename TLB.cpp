@@ -26,7 +26,7 @@ void TLB::update(int index, int frameNum, int pageNum) {
 			int victim = algorithm.LRUreplace(entries);					                     //execute LRU replacement algorithm
 			entries[victim].updateTLBEntry(frameNum, pageNum);								 //boot victim entry off and replace it with new entry
 		#else																				 //else FIFO selected
-			int victim = algorithm.FIFOreplace(frameNum, pageNum, entries);					 //execute FIFO replacement algorithm
+			int victim = algorithm.FIFOreplace();					 //execute FIFO replacement algorithm
 			entries[victim].updateTLBEntry(frameNum, pageNum);								 //boot victim entry off and replace it with new entry
 		#endif
 	}
@@ -37,6 +37,7 @@ void TLB::update(int index, int frameNum, int pageNum) {
 		#endif
 	}
 }
+
 int TLB::findAvailableSpot(){
 	if (numTLBEntries == TLB_SIZE) {
 		return -1;
@@ -53,6 +54,9 @@ int TLB::findAvailableSpot(){
 	}
 }
 int TLB::retrieveFrame(int pageNum){
-	return entries[pageNum].getFrame();
+	for (int i = 0; i < TLB_SIZE; i++) {
+		if (entries[i].getPage() == pageNum) {
+			return entries[i].getFrame();
+		}
+	}
 }
-

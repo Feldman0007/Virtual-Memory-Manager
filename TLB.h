@@ -9,10 +9,16 @@ struct TLBEntry {
 	int pageNum;
 	bool isAvailable;
 	int useTime;
-
-	void updateTLBEntry(int frame, int page) {
+	
+	TLBEntry() {
+		frameNum = -999;
+		pageNum = -999;
+		isAvailable = true;
+		useTime = 0;
+	}
+	void updateTLBEntry(int frame, int pg) {
 		frameNum = frame;
-		pageNum = page;
+		pageNum = pg;
 		useTime = 0;
 		isAvailable = false;
 	}

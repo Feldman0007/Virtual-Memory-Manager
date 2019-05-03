@@ -1,4 +1,6 @@
 #include "TLB.h"
+#include <iostream>
+using namespace std;
 
 int TLBReplacementAlgorithm::LRUreplace(TLBEntry *tlb) {								    //LRU replacement algorithm for TLB
 	int lruValue = 0;																		// least recently used time, used in comparisons to find LRU time
@@ -13,6 +15,10 @@ int TLBReplacementAlgorithm::LRUreplace(TLBEntry *tlb) {								    //LRU replac
 }
 
 int TLBReplacementAlgorithm::FIFOreplace() {
+	if (tlbQueue.empty()) {
+		cout << "This is the problem";
+		system("PAUSE");
+	}
 	int victim = dequeue();																	//find victim and remove from front of queue
 	enqueue(victim);																		//add that entry back to the end of the queue since it is now the last entry in
 	return victim;																			//return victim

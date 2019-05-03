@@ -33,7 +33,6 @@ void VMM::processInput(int intAddr) {
 			mmu.update_page_in_faults();																			//update number of faults
 			pageFaultRoutine(pageNum);							
 		}
-		// call update here
 	}
 }
 
@@ -70,9 +69,12 @@ void VMM::pageFaultRoutine(int faultingPage) {																		//trap
 	}
 	else {																											//else we found an available frame, store data there
 		mmu.storeInRam(ram, freeFrameNumber, frame);																//Push data into the free frame in RAM
-		pgTable.updatePageTable(faultingPage, freeFrameNumber);														// Update the page table
+		pgTable.updatePageTable(faultingPage, freeFrameNumber);														//Update the page table
 		mmu.read_and_print(ram, freeFrameNumber, mmu.getAddress().getDispacement());								//send data to output
-		mmu.updateTLB(freeFrameNumber, faultingPage);																		//update the tlb with the page and frame we just accessed
+		mmu.updateTLB(freeFrameNumber, faultingPage);																//update the tlb with the page and frame we just accessed
+		#if (!PAGE_REPLACE)																							//if we are using FIFO page replacement
+			algorithm.enqueue(freeFrameNumber);																		//add to fifo queu
+		#endif
 	}																		
 }
 

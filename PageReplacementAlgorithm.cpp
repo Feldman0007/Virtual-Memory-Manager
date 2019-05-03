@@ -22,7 +22,11 @@ void PageReplacementAlgorithm::enqueue(int value) {
 	pageQueue.push(value);
 }
 int PageReplacementAlgorithm::dequeue() {
-	int victim = pageQueue.front();
+	if (pageQueue.empty()) {
+		cout << "This is the problem";
+		system("PAUSE");
+	}
+	int &victim = pageQueue.front();
 	pageQueue.pop();
 	return victim;
 }

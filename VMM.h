@@ -6,6 +6,7 @@
 #include "PageTable.h"
 #include "RAM.h"
 #include "BackingStore.h"
+#include "ReplacementAlgorithm.h"
 #include <iomanip>
 
 
@@ -14,20 +15,18 @@
 
 class VMM {
 private:
-	Address currentAddress;
 	MMU mmu;
-	PageTable page_table;
-	RAM ram;
+	PageTable pgTable;
 	BackingStore backingStore; 
+	RAM ram;
 	bool freeFramesList[256];
-	int numLogic = 0;
-
+	PageReplacementAlgorithm algorithm;
 public:
 	VMM();
 	char* pageIn();
-	void pageFaultRoutine();
+	void pageFaultRoutine(int);
 	void processInput(int);
-	int findAvailableFrame();
+	int findFreeFrame();
 	void print();
 }; 
 

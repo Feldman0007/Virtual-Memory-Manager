@@ -3,6 +3,8 @@
 #define ADDRESS_MASK 0xFFFF
 #define OFFSET_MASK 0xFF
 
+//void getPhysicalA(string file) { ; }
+
 MMU::MMU() {
 	int page_access_count_  = 0;
 	int page_in_faults_		= 0;
@@ -10,16 +12,29 @@ MMU::MMU() {
 	int tlb_faults_			= 0;
 }
 
-void MMU::processAddress(int intAddr, Address &current) {
+void MMU::processAddress(int intAddr) {
 	int intOffset;
 	int intPageNum;
 
-	intPageNum = ((intAddr & ADDRESS_MASK) >> 8);						 //mask to get page number 
+	intPageNum = ((intAddr & ADDRESS_MASK) >> 8);						 //mask to get pagenumber 
 	intOffset = intAddr & OFFSET_MASK; 									 //mask to get the offset  
 
-	current.setDisplacement(intOffset);
-	current.setPage(intPageNum);
-	current.setLogicalAddress(intAddr);
+	currentAddress.setDisplacement(intOffset);
+	currentAddress.setPage(intPageNum);
+	currentAddress.setLogicalAddress(intAddr);
+}
+
+void MMU::read_and_print(RAM &r, int frameNumber, int frameOffset) {
+	int byteOfData = r.access(frameNumber, frameOffset);
+	cout << "Physical Address: " << frameNumber << frameOffset << right << setw(3) << " | ";
+	cout << "Byte of Data: " << setw(8) << std::hex << byteOfData << endl;
+}
+void MMU::storeInRam(RAM &r, int freeFrame, char * frame) {
+	r.store(freeFrame, frame);
+}
+
+Address MMU::getAddress(){
+	return currentAddress;
 }
 
 bool MMU::checkTLB(int pageNum) {
@@ -27,11 +42,11 @@ bool MMU::checkTLB(int pageNum) {
 }
 
 void MMU::updateTLB(int frameNum, int pageNum) {
-	tlb.update(frameNum, pageNum);
+	tlb.update(tlb.findAvailableSpot(), frameNum, pageNum);
 }
 
-int MMU::getFrameTLB(int pageNum){
-	return tlb.getFrameTLBEntry(pageNum);
+int MMU::tlb_get_frame(int pageNum){
+	return tlb.retrieveFrame(pageNum);
 }
 
 void MMU::update_page_access_count(){
@@ -66,3 +81,4 @@ void MMU::calculatePageFaultRate(){
 	float faultRate = (page_in_faults / (float)page_access_count) * 100;	// page_in
 	cout << "Page-Fault Rate: " << faultRate << "%" << endl;
 }
+

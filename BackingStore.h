@@ -1,9 +1,9 @@
 #pragma once
 #ifndef BACKINGSTORE_H
 #define BACKINGSTORE_H
+#include "RAM.H"
 #include <iostream>
 #include <fstream>
-#include "RAM.h"
 
 using namespace std;
 

@@ -3,52 +3,54 @@
 TLB::TLB() {
 	numTLBEntries = 0;
 }
+
 bool TLB::hit(int pageNum) {
 	for (int i = 0; i < TLB_SIZE; i++) {
-		if (translationLookAsideBuffer[i].getPage() == pageNum) {		//If an entry exists for the given page number
-			//if LRU
-			translationLookAsideBuffer[i].useTime = 0;
-			return true;												// we have a tlb hit, so return true
+		if (entries[i].getPage() == pageNum) {		
+			entries[i].useTime = 0;
+			return true; 
 		}
 	}
-	return false; // tlb miss
+	return false; 
 }
 
-void TLB::update(int frameNum, int pageNum) {											//Update pageNum, frameNum  in TLB at available slot. If there is already a TLB entry for the given page 
-	for (int i = 0; i < TLB_SIZE; i++) {
-		translationLookAsideBuffer[i].useTime++;
+void TLB::update(int index, int frameNum, int pageNum) {
+	#if (TLB_REPLACE)
+		for (int i = 0; i < TLB_SIZE; i++) {												 //We are accessing the tlb, so update the use time of all entries
+			entries[i].useTime++;
+		}
+	#endif
+	if (index == -1){																		 //If tlb if full, execute a tlb replacement algorithm
+		#if (TLB_REPLACE)																	 //If LRU selected
+			int victim = algorithm.LRUreplace(entries);					                     //execute LRU replacement algorithm
+			entries[victim].updateTLBEntry(frameNum, pageNum);								 //boot victim entry off and replace it with new entry
+		#else																				 //else FIFO selected
+			int victim = algorithm.FIFOreplace(frameNum, pageNum, entries);					 //execute FIFO replacement algorithm
+			entries[victim].updateTLBEntry(frameNum, pageNum);								 //boot victim entry off and replace it with new entry
+		#endif
 	}
-	int index = findAvailableSpot();	//Find available index
-	if (index == -1) {  //if the TLB is full, call a replacement algorithm
-		//if (LRU)
-		algorithm.LRUreplace(frameNum, pageNum, translationLookAsideBuffer); // call 
-		//else (FIFO)
-			//algorithm.FIFOreplace(frameNum, pageNum, translationLookAsideBuffer);
-	}
-	else{
-		translationLookAsideBuffer[index].updateTLBEntry(frameNum, pageNum); 
-		//if FIFO
-			//algorithm.enqueue(i);
+	else{																					 //else, we found an available spot
+		entries[index].updateTLBEntry(frameNum, pageNum);									 //simply add that entry to the tlb
+		#if (!TLB_REPLACE)																	 //if we are using FIFO replacement algorithm
+				algorithm.enqueue(index);													 //add to fifo queue 
+		#endif
 	}
 }
-
-int TLB::findAvailableSpot() {
+int TLB::findAvailableSpot(){
 	if (numTLBEntries == TLB_SIZE) {
-		return -1; //flag variable, TLB is full
+		return -1;
 	}
-	else
-	{
-		for (int i = 0; i < TLB_SIZE; i++) {
-			if (translationLookAsideBuffer[i].isAvailable == true) {
-				translationLookAsideBuffer[i].isAvailable = false;			// we will populate it, no longer available
+	else {
+		for (int i = 0; i < TLB_SIZE; i++){
+			if (entries[i].isAvailable == true) {
+				entries[i].isAvailable = false;	
 				numTLBEntries++;
 				return i;
 			}
-
 		}
 	}
 }
-
-int TLB::getFrameTLBEntry(int pageNum){
-	return translationLookAsideBuffer[pageNum].getFrame();
+int TLB::retrieveFrame(int pageNum){
+	return entries[pageNum].getFrame();
 }
+

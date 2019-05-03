@@ -5,29 +5,17 @@
 
 #include "ReplacementAlgorithm.h"
 
-using namespace std;
-/*
-class TLBReplacementAlgorithm : public ReplacementAlgorithm {
-};
-*/
-struct TLBEntry{
+struct TLBEntry {
 	int frameNum;
 	int pageNum;
-	int useTime;
 	bool isAvailable;
+	int useTime;
 
-
-	TLBEntry() {
-		frameNum = -999;
-		pageNum = -999;
+	void updateTLBEntry(int frame, int page) {
+		frameNum = frame;
+		pageNum = page;
 		useTime = 0;
-		isAvailable = true;
-	}
-	void updateTLBEntry(int f, int p) {
-		frameNum = f;
-		pageNum = p;
 		isAvailable = false;
-		useTime = 0;
 	}
 	int getFrame() {
 		return frameNum;
@@ -38,20 +26,18 @@ struct TLBEntry{
 };
 
 
-class TLB {
+class TLB{
 	private:
-		TLBEntry translationLookAsideBuffer[TLB_SIZE];
-		TLBReplacementAlgorithm algorithm;
-		int numTLBEntries;
-																	//ReplacementAlgorithm replacementAlgorithm;
+		TLBEntry entries[TLB_SIZE];					//entries is an array of TLB entries. 
+		int numTLBEntries;							//counter to keep track of the number of entries in the TLB
+		TLBReplacementAlgorithm algorithm;			//fifo or lru tlb entry replacement
 
-		//int translationLookasideBuffer[TLB_SIZE];
 	public:
 		TLB();
 		bool hit(int);
-		int findAvailableSpot();
-		void update(int, int);
-		int getFrameTLBEntry(int);
-};
+		int findAvailableSpot();					//returns the first available spot in the tlb. returns sentinel value -1 if tlb is full. 
+		void update(int, int, int);					
+		int retrieveFrame(int);						
+};	
 
 #endif

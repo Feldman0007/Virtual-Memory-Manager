@@ -3,9 +3,10 @@
 #define VMM_H
 #include "Address.h"
 #include "MMU.h"
-#include "PageTable.h"
+#include "ProcessControlBlock.h"
 #include "RAM.h"
 #include "BackingStore.h"
+#include "PageReplacementAlgorithm.h"
 #include <iomanip>
 
 
@@ -15,20 +16,19 @@
 class VMM {
 private:
 	MMU mmu;
-	PageTable pgTable;
+	ProcessControlBlock pcb;
+	BackingStore backingStore;
 	RAM ram;
-	BackingStore backingStore; 
-	bool freeFramesList[256];
-	int numLogic = 0;
-
+	bool freeFramesList[RAM_SIZE];
+	PageReplacementAlgorithm algorithm;
 public:
 	VMM();
 	char* pageIn();
-	void pageFaultRoutine();
+	void pageFaultRoutine(int);
 	void processInput(int);
-	int findAvailableFrame();
-	void print();
-}; 
+	int findFreeFrame();
+	void printResults();
+};
 
 #endif
 

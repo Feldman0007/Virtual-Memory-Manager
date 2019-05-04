@@ -24,21 +24,31 @@ void MMU::processAddress(int intAddr) {
 	currentAddress.setLogicalAddress(intAddr);
 }
 
+void MMU::read_and_print(RAM& r, int frameNumber, int frameOffset) {
+	cout  << " (" << frameNumber << frameOffset << "): ";
+	int byteOfData = r.access(frameNumber, frameOffset);
+
+	cout << hex << uppercase  << byteOfData << endl;
+
+}
+void MMU::storeInRam(RAM &r, int freeFrame, char * frame) {
+	r.store(freeFrame, frame);
+}
+
 Address MMU::getAddress(){
 	return currentAddress;
 }
 
 bool MMU::checkTLB(int pageNum) {
 	return tlb.hit(pageNum);
-
 }
 
 void MMU::updateTLB(int frameNum, int pageNum) {
 	tlb.update(tlb.findAvailableSpot(), frameNum, pageNum);
 }
 
-int MMU::retrieveFrame(int pageNum){
-	return tlb.tlbGetFrame(pageNum);
+int MMU::tlb_get_frame(int pageNum){
+	return tlb.retrieveFrame(pageNum);
 }
 
 void MMU::update_page_access_count(){
@@ -73,3 +83,4 @@ void MMU::calculatePageFaultRate(){
 	float faultRate = (page_in_faults / (float)page_access_count) * 100;	// page_in
 	cout << "Page-Fault Rate: " << faultRate << "%" << endl;
 }
+

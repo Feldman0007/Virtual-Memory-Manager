@@ -11,6 +11,7 @@ struct headers {
 
 int main() {
 	
+
 	ifstream fileReader;//remove later
 	fileReader.open("addresses.txt");//remove later
 
@@ -27,19 +28,11 @@ int main() {
 		// 4) Use that physical address to locate the and output the value of the byte stored in RAM
 
 	}	
-
-	virtualMemoryManager.print();
-
+	virtualMemoryManager.printResults();
 
 	fileReader.close();
 	system("PAUSE");
 	return 0;
-
-	/*
-
-		double pfRate = pageFaults / (double)numOfphysicalAddress;
-		double TLBRate = TLBHits / (double)numOfphysicalAddress;
-	*/
 }
 
 

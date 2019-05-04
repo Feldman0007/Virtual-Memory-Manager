@@ -6,9 +6,9 @@
 #include "BackingStore.h"
 #include "Address.h"
 #include "RAM.h"
-#include "PageTable.h"
-#include "Word.h"
+#include "ProcessControlBlock.h"
 #include "TLB.h"
+
 using namespace std;
 
 #ifndef MMU_H
@@ -16,8 +16,8 @@ using namespace std;
 
 class MMU { 
 private:
-	Address currentAddress; // The address we are currently working with
-	TLB tlb;
+	Address currentAddress; // Instance of the address we are currently working with
+	TLB tlb;                // Instance of the tlb. The tlb is an object of the MMU
 
 	int page_access_count;
 	int page_in_faults;
@@ -30,17 +30,17 @@ public:
 	Address getAddress();
 	
 	bool checkTLB(int);
-	int retrieveFrame(int);
+	int tlb_get_frame(int);
 	void updateTLB(int, int);
-
+	void read_and_print(RAM &, int, int);
+	void storeInRam(RAM &, int, char *);
+	
 	void update_page_access_count();
 	void update_page_in_faults();
 	void update_tlb_access_count();
 	void update_tlb_faults();
-
 	void calculateTLBRate();
 	void calculatePageFaultRate();
-	//call function in page table to convert 
 };
 
 

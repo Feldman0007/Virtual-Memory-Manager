@@ -2,7 +2,7 @@
 #ifndef TLBREPLACEMENTALGORITHM_H
 #define TLBREPLACEMENTALGORITHM_H
 
-#define TLB_REPLACE 1 //1 for for tlb replacement using lru, 0 for FIFO
+#define TLB_REPLACE 0 //1 for for tlb replacement using lru, 0 for FIFO
 #include <queue>
 
 using namespace std;

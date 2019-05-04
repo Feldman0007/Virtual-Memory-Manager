@@ -21,12 +21,13 @@ void TLB::update(int index, int frameNum, int pageNum) {
 			entries[i].useTime++;
 		}
 	#endif
+
 	if (index == -1){																		 //If tlb if full, execute a tlb replacement algorithm
 		#if (TLB_REPLACE)																	 //If LRU selected
 			int victim = algorithm.LRUreplace(entries);					                     //execute LRU replacement algorithm
 			entries[victim].updateTLBEntry(frameNum, pageNum);								 //boot victim entry off and replace it with new entry
 		#else																				 //else FIFO selected
-			int victim = algorithm.FIFOreplace();					 //execute FIFO replacement algorithm
+			int victim = algorithm.FIFOreplace();											 //execute FIFO replacement algorithm
 			entries[victim].updateTLBEntry(frameNum, pageNum);								 //boot victim entry off and replace it with new entry
 		#endif
 	}
@@ -59,4 +60,5 @@ int TLB::retrieveFrame(int pageNum){
 			return entries[i].getFrame();
 		}
 	}
+	return -1;// dummy value to appease the compiler :)
 }

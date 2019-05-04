@@ -4,10 +4,14 @@
 #include "VMM.h"
 
 using namespace std;
-
-struct headers {
-	unsigned int totalFrames;
-};
+/*
+-----------------------------------------------------------------------Main thread of execution--------------------------------------------------------------------------------------------------------|
+Main.cpp is our program's main thread of execution. Inside main we create an instance of VMM (see vmm.h for description), and pass it all the logical addresses from the input file to be processed.   |
+After VMM has processed all page requests, we print the TLB hit rate and Page Fault rate.																											   |																																																   | 				
+-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+*/
+											//cout << "Logical Address: " << logicalAddress << endl; 
+											//Process is the primary function of VMM input is will:
 
 int main() {
 	
@@ -16,33 +20,21 @@ int main() {
 
 	VMM virtualMemoryManager;
 	int logicalAddress;
-	
+
 	while (fileReader >> logicalAddress) {
-		//cout << "Logical Address: " << logicalAddress << endl; 
 		virtualMemoryManager.processInput(logicalAddress);
-		//Process is the primary function of VMM input is will:
-		// 1) Extract page number p so we may use it to index into the page table
-		// 2) Use the page number p to index into the page table to retreive frame number f 
-		// 3) Replace the page number p in the logical address with the frame number f.
-		// 4) Use that physical address to locate the and output the value of the byte stored in RAM
-
 	}	
-
-	virtualMemoryManager.print();
-
-
+	
+	virtualMemoryManager.printResults();
 	fileReader.close();
+	
 	system("PAUSE");
 	return 0;
 
 	/*
-
-		double pfRate = pageFaults / (double)numOfphysicalAddress;
-		double TLBRate = TLBHits / (double)numOfphysicalAddress;
-	*/
+	
+	for (int i = 0; i < 32; i++) {
+	printf("%x", hashedChars[i];
+*/
 }
-
-
-
-
 

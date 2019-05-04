@@ -7,6 +7,23 @@
 
 using namespace std;
 
+
+/*
+------------------------------------------------------------------------- Backing Store ----------------------------------------------------------------------------
+
+Role:
+	Backing store is typically part of a hard disk that is used by a paging or swapping system to store information not currently on main memory
+
+Responsibliy
+	Backing store will use default constructor to read the BackingStore.bin and make sure that it is being open properly
+	Backing store will be closed at destruction
+	In this project, we are limited to only reading from BackingStore, so we can only access to BackingStore when the data need to be brought to the main memory. 
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------------------------
+*/
+
+
 class BackingStore {
 private: 
 	ifstream binaryFileReader;
@@ -17,25 +34,3 @@ public:
 	char * read(int);
 };
 #endif
-
-
-///int fetchPage(const &pageNumber)
-//string filename = "BACKING_STORE.bin";//remove later
-//ifstream binaryFileReader;//remove later
-
-//char data[PAGE_SIZE];
-
-//binaryFileReader.open(filename, ios::in | ios::binary);
-//binaryFileReader.seekg(0, ios::end);
-//binaryFileReader.read(data, PAGE_SIZE);
-////index * PAGE_SIZE
-
-
-
-//if (binaryFileReader.fail()) {
-//	cout << "Error Opening File " << endl;
-//	system("PAUSE");
-//}
-//for (int i = 0; i < PAGE_SIZE; i++) {
-//	cout << "Page: " << i << " Data: " << data[i] << endl;
-//}

@@ -6,6 +6,19 @@
 #include <iostream>
 using namespace std;
 
+
+/* 
+-------------------------------------------------- Address Class ------------------------------------------
+
+Role:
+	The address class is responsible for housing address information 
+
+Responsiblity 
+	We use Address class to store information regarding to Page Number, Page Offset, and logicalAddress
+
+-----------------------------------------------------------------------------------------------------------
+*/
+
 class Address {
 private:
 	int pageNumber;

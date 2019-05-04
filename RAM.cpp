@@ -22,6 +22,5 @@ int RAM::access(int frameNumber, int frameOffset) {
 	frameStatuses[frameNumber].useTime = 0; //the frame we just accessed is now most recently used
 	frameStatuses[frameNumber].accessed = true;
 
-	int byteOfData = physicalMemory[frameNumber][frameOffset]; //grab byte of data from RAM using physical address (f + d)
-	return byteOfData;
+	return physicalMemory[frameNumber][frameOffset]; //grab byte of data from RAM using physical address (f + d)
 }

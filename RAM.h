@@ -2,7 +2,7 @@
 #ifndef RAM_H
 #define RAM_H
 #define FRAME_SIZE 256
-#define RAM_SIZE 256
+#define RAM_SIZE 128
 
 #include <iostream>
 #include <iomanip>
@@ -23,7 +23,7 @@ struct Status {
 
 class RAM {
 private:
-	char physicalMemory[RAM_SIZE][FRAME_SIZE];														 //volatile physical memory
+	char physicalMemory[RAM_SIZE][FRAME_SIZE];														 //volatile memory
 	Status frameStatuses[RAM_SIZE];																	 //parallel array storing status information for each frame.
 public:
 	void store(int, char *);																		 //store a frame of data in ram; from the backing store

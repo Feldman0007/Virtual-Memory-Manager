@@ -6,13 +6,26 @@
 #include "BackingStore.h"
 #include "Address.h"
 #include "RAM.h"
-#include "PageTable.h"
+#include "ProcessControlBlock.h"
 #include "TLB.h"
 
 using namespace std;
 
 #ifndef MMU_H
 #define MMU_H
+
+/*
+-------------------------------------------------- Memory Management Unit -------------------------------------------------------------
+Role:
+	We will be using Memory Managememt Unit to oversees and regulates the process's use of Ram
+	It also translate 
+	validation and trap 
+
+Responbility 
+	It will receive logical addresses (page requests) from a process, and it will also be incharge of reading and access through Ram
+
+---------------------------------------------------------------------------------------------------------------------------------------
+*/
 
 class MMU { 
 private:

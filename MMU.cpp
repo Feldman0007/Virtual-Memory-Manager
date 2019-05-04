@@ -3,8 +3,6 @@
 #define ADDRESS_MASK 0xFFFF
 #define OFFSET_MASK 0xFF
 
-//void getPhysicalA(string file) { ; }
-
 MMU::MMU() {
 	int page_access_count_  = 0;
 	int page_in_faults_		= 0;
@@ -25,9 +23,11 @@ void MMU::processAddress(int intAddr) {
 }
 
 void MMU::read_and_print(RAM &r, int frameNumber, int frameOffset) {
-	int byteOfData = r.access(frameNumber, frameOffset);
-	cout << "Physical Address: " << frameNumber << frameOffset << right << setw(3) << " | ";
-	cout << "Byte of Data: " << setw(8) << std::hex << byteOfData << endl;
+	int byteOfData = r.access(frameNumber, frameOffset);									//construct physical address (f + d) and access RAM using this address
+	cout << " (" << frameNumber << frameOffset <<"): ";										//output physical address
+	cout << std::hex << byteOfData << endl;													//output byte of data stored in memory at the given physical address
+	//printf("%x \n", byteOfData);
+	//cout << endl;
 }
 void MMU::storeInRam(RAM &r, int freeFrame, char * frame) {
 	r.store(freeFrame, frame);

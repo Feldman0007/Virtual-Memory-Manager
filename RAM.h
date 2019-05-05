@@ -2,7 +2,7 @@
 #ifndef RAM_H
 #define RAM_H
 #define FRAME_SIZE 256
-#define RAM_SIZE 128
+#define RAM_SIZE 256
 
 #include <iostream>
 #include <iomanip>

@@ -22,15 +22,15 @@ void VMM::processInput(int intAddr) {
 	else {																											//else we have a tlb miss, look in the page table			
 		mmu.update_tlb_faults();																					//increment tlb fault count
 
-		mmu.update_page_access_count();																				//increment page access count, as we are about to check reference the page table
-
+																				//increment page access count, as we are about to check reference the page table
 		bool valid = pcb.pageTableLookup(pageNum);																	//determine if that page's valid bit is marked valid or invalid
 		try {
 			if (!valid)																								//if page table entry is marked invalid
 			{
 				throw valid;																						//generate an interrupt for the page fault routine
 			}
-			else {																									//otherwise the frame associated with the page is valid and we can proceed normally...
+			else {	
+				mmu.update_page_access_count();											//otherwise the frame associated with the page is valid and we can proceed normally...
 				mmu.read_and_print(ram, pcb.getFrame(pageNum), mmu.getAddress().getDispacement());					//access RAM, read in data, and print output using frame number provided by the page table			  
 				mmu.updateTLB(pcb.getFrame(pageNum), pageNum);														//update the tlb with the page table entry we just accessed
 			}

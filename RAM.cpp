@@ -15,7 +15,7 @@ int RAM::getUseTime(int frameNumber) {
 	return frameStatuses[frameNumber].useTime;
 }
 
-int RAM::access(int frameNumber, int frameOffset) {
+int RAM::accessRAM(int frameNumber, int frameOffset) {
 	for (int i = 0; i < FRAME_SIZE; i++) { //increment the use time of all other frame use times
 		frameStatuses[i].useTime++;
 	}

@@ -27,7 +27,7 @@ private:
 	Status frameStatuses[RAM_SIZE];																	 //parallel array storing status information for each frame.
 public:
 	void store(int, char *);																		 //store a frame of data in ram; from the backing store
-	int access(int, int);																			 //access RAM using physical address and return byte of data
+	int accessRAM(int, int);																		 //access RAM using physical address and return byte of data
 	int getUseTime(int);
 };
 

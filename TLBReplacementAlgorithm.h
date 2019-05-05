@@ -7,6 +7,18 @@
 
 using namespace std;
 
+
+/*-------------------------------- TLB Replacement Algorithm  ---------------------------------------
+Role:
+
+
+
+Responsiblity
+
+
+-----------------------------------------------------------------------------------------------------
+*/
+
 struct TLBEntry; //forward declaration of tlb entry. We were having circular dependecies so we needed to do some forward declarations
 
 class TLBReplacementAlgorithm {

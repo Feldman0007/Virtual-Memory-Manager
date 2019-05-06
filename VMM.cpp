@@ -9,36 +9,32 @@ char * VMM::pageIn(){
 	return backingStore.read(mmu.getAddress().getPage());															//fetch data from backingStore 
 }
 
-void VMM::processInput(int intAddr) {
-	cout << hex << uppercase << intAddr;
-	mmu.processAddress(intAddr);
+void VMM::processInput(unsigned int intAddr) {
+	cout << hex << setw(4) << setfill('0') << uppercase << intAddr;
+	mmu.processAddress(intAddr);																					//After this line, address is updated pageNumber, pageOffset, and logicalAddress
 	int pageNum = mmu.getAddress().getPage();																		//get page number of the address we're working with
 	
 	mmu.update_tlb_access_count();																				    //we are about to access tlb, increment total tlb access count
-	if (mmu.checkTLB(pageNum)) {																					//if we have a TLB hit
+	if (mmu.checkTLB(pageNum)) {																					//if we have a TLB hit - if condition: loop through TLB, looking for pageNum, if exist, set usedTime = 0, return true
 		mmu.read_and_print(ram, mmu.tlb_get_frame(pageNum), mmu.getAddress().getDispacement());						//access RAM, read in data, and print output using frame number provided by the TLB
 		mmu.updateTLB(mmu.tlb_get_frame(pageNum), pageNum);															//since we accessed tlb, update usage time for the LRU algorithm 
 	}	
 	else {																											//else we have a tlb miss, look in the page table			
 		mmu.update_tlb_faults();																					//increment tlb fault count
-		bool valid = pcb.pageTableLookup(pageNum);																	//determine if that page's valid bit is marked valid or invalid
+		
 		try {
-			if (!valid)																								//if page table entry is marked invalid
-			{
-				throw valid;																						//generate an interrupt for the page fault routine
-			}
-			else {																									//otherwise the frame associated with the page is valid and we can proceed normally...
-				mmu.update_page_access_count();																		//increment page access count, as we are about to check reference the page table
-				mmu.read_and_print(ram, pcb.getFrame(pageNum), mmu.getAddress().getDispacement());					//access RAM, read in data, and print output using frame number provided by the page table			  
-				mmu.updateTLB(pcb.getFrame(pageNum), pageNum);														//update the tlb with the page table entry we just accessed
-			}
-		}
-		catch (bool valid) {																						//handle interrupt
+			bool valid = pcb.pageTableLookup(pageNum);																//determine if that page's valid bit is marked valid or invalid - page table at index pageNum, return false=available, true=used
+			mmu.trap(valid, pageNum);																				//Have we encountered a page fault? Let MMU determine whether a trap will be generated.
+		}																																																			
+		catch (int faultingPage) {																						
 			mmu.update_page_in_faults();																			//increment page fault count
-			pageFaultRoutine(pageNum);																				//handle page fault
-			valid = true;																							//using variable valid so the compiler stops complaining. However, reflects that valid bit will become valid after we load page into memory
-		}		
-	}
+			pageFaultRoutine(faultingPage);																			//handle page fault
+			return;																									//page fault routine complete, we are done processing this page request
+		}																											//otherwise the frame associated with the page is valid and we can proceed normally...
+		mmu.update_page_access_count();																				//increment page access count, we have successfully accessed memory from the page table
+		mmu.read_and_print(ram, pcb.getFrame(pageNum), mmu.getAddress().getDispacement());							//access RAM, read in data, and print output using frame number provided by the page table			  
+		mmu.updateTLB(pcb.getFrame(pageNum), pageNum);																//update the tlb with the page table entry we just accessed
+	}		
 }
 
 void VMM::printResults() {

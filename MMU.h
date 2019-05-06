@@ -16,16 +16,23 @@ using namespace std;
 
 /*
 -------------------------------------------------- Memory Management Unit -------------------------------------------------------------
+Purpose:
+	MMU is a middle man who connect many parts together. He's a bridge of communication among parts of program.
 Role:
 	We will be using Memory Managememt Unit to oversees and regulates the process's use of Ram
-	It also translate 
-	validation and trap 
+	It also translate addresses among systems
+	Do the validation and trap 
 
-Responbility 
+Responsibilities:
 	It will receive logical addresses (page requests) from a process, and it will also be incharge of reading and access through Ram
+	Store and Calculate result. 
 
 ---------------------------------------------------------------------------------------------------------------------------------------
 */
+
+struct PageFault {
+	uint32_t faultingPage;
+};
 
 class MMU { 
 private:
@@ -39,14 +46,15 @@ private:
 	
 public: 
 	MMU();
-	void processAddress(int);
+	void processAddress(unsigned int);
 	Address getAddress();
 	
 	bool checkTLB(int);
 	int tlb_get_frame(int);
 	void updateTLB(int, int);
-	void read_and_print(RAM &, int, int);
+	void read_and_print(RAM &, unsigned int, unsigned int);
 	void storeInRam(RAM &, int, char *);
+	void trap(bool, int);
 	
 	void update_page_access_count();
 	void update_page_in_faults();

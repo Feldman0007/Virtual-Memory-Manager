@@ -19,7 +19,7 @@ int main() {
 	fileReader.open("addresses.txt");//remove later
 
 	VMM virtualMemoryManager;
-	int logicalAddress;
+	unsigned int logicalAddress;
 
 	while (fileReader >> logicalAddress) {
 		virtualMemoryManager.processInput(logicalAddress);
@@ -28,7 +28,7 @@ int main() {
 	virtualMemoryManager.printResults();
 	fileReader.close();
 	
-	system("PAUSE");
+	system("PAUSE"); // remove
 	return 0;
 
 	/*

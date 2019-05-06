@@ -1,11 +1,11 @@
 #include "Address.h"
 
-void Address::setDisplacement(int d) //store offset
+void Address::setDisplacement(unsigned int d) //store offset
 { 
 	pageOffset = d;
 }
 
-void Address::setPage(int p) //store pageNUm
+void Address::setPage(unsigned int p) //store pageNUm
 {
 	pageNumber = p;
 }
@@ -24,6 +24,6 @@ int Address::getAddress() {
 	return logicalAddress;
 }
 
-void Address::setLogicalAddress(int intAddr){
+void Address::setLogicalAddress(unsigned int intAddr){
 	logicalAddress = intAddr;
 }

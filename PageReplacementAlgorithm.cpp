@@ -23,8 +23,6 @@ void PageReplacementAlgorithm::enqueue(int value) {
 }
 int PageReplacementAlgorithm::dequeue() {
 	if (pageQueue.empty()) {
-		cout << "This is the problem";
-		system("PAUSE");
 	}
 	int &victim = pageQueue.front();
 	pageQueue.pop();

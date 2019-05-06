@@ -10,25 +10,39 @@ MMU::MMU() {
 	int tlb_faults_			= 0;
 }
 
-void MMU::processAddress(int intAddr) {
-	int intOffset;
-	int intPageNum;
+void MMU::processAddress(unsigned int intAddr) {
+	unsigned int intOffset;
+	unsigned int intPageNum;
 
 	intPageNum = ((intAddr & ADDRESS_MASK) >> 8);						 //mask to get pagenumber 
-	intOffset = intAddr & OFFSET_MASK; 									 //mask to get the offset  
+	intOffset = intAddr & OFFSET_MASK; 									 //mask to get the offset	
 
 	currentAddress.setDisplacement(intOffset);
 	currentAddress.setPage(intPageNum);
 	currentAddress.setLogicalAddress(intAddr);
 }
 
-void MMU::read_and_print(RAM &r, int frameNumber, int frameOffset) {
-	int byteOfData = r.accessRAM(frameNumber, frameOffset);									//construct physical address (f + d) and access RAM using this address
-	cout << " (" << frameNumber << frameOffset <<"): ";										//output physical address
-	cout << std::hex << byteOfData << endl;													//output byte of data stored in memory at the given physical address
-	//printf("%x \n", byteOfData);
-	//cout << endl;
+void MMU::read_and_print(RAM &r, unsigned int frameNumber, unsigned int frameOffset) {
+	//--Tom  The output doesn't print just one byte when the MSB is set.  By using a signed int as the type for byteOfData, you are
+	//       extending the sign bit across the entire word.  Then when you print it in hex, you et the wrong value printed.  Here
+	//       particular, but generally all the program, avoid signed types and use unsigned types.  Nothing in this entire program
+	//       requires a signed type.
+	int byteOfData = r.accessRAM(frameNumber, frameOffset);						//construct physical address (f + d) and access RAM using this address
+	
+	cout << " (" << setw(2) << frameNumber << setw(2) << frameOffset << "): ";				//output physical address
+
+	cout << byteOfData << endl;																//output byte of data stored in memory at the given physical address
 }
+
+void MMU::trap(bool validBit, int pgNum) {																//a trap will be executed if the valid bit of the page table entry is set to invalid (false)
+	if (!validBit) {
+		throw pgNum;
+	}
+	else {
+		return;
+	}
+}
+
 void MMU::storeInRam(RAM &r, int freeFrame, char * frame) {
 	r.store(freeFrame, frame);
 }

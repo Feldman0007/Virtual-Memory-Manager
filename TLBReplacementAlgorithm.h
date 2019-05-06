@@ -9,12 +9,15 @@ using namespace std;
 
 
 /*-------------------------------- TLB Replacement Algorithm  ---------------------------------------
+Purpose:
+	Keep recent use value in touch even though TLB is full
 Role:
+	When TLB is full and we have new coming value. TLB Replacement will decide who will be left to take place for new one.
 
-
-
-Responsiblity
-
+Responsibilities:
+	Depending on algorithm is FIFO or LRU, leaving element will be picked differently.
+	In both FIFO and LRU, TLB replacement manages processes from picking a victim, take it out, put the new in, and return the victim which can be use later by other process.
+	In FIFO, queue system is involved while time management is used in LRU to control who will be in and who will be out when needed.
 
 -----------------------------------------------------------------------------------------------------
 */

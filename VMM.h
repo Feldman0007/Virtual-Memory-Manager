@@ -10,7 +10,7 @@
 #include <iomanip>
 
 /*
------------------------------------------------------------------------------- Virtual Memory Manager --------------------------------------------------------------------------------
+------------------------------------------------------------------------------ Virtual Memory Manager ----------------------------------------------------------------------------------------
 Virtual Memory Manager is our over arching class that includes most of the working pieces of a virtual memory management system.
 VMM includes : 
 				MMU (which contains the TLB)
@@ -23,6 +23,7 @@ Purpose:
 	most of it is supported by data held in secondary storage.
 
 Role:
+	Process input
 	Occupy physical memory with things that are likely to be used
 	Load things in as we need them (demand paging)
 
@@ -36,7 +37,7 @@ Responsibilities:
 			4) Construct a physical address and use that address to locate the and output the value of the byte stored in RAM
 
 	
--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 */
 
 
@@ -54,7 +55,7 @@ public:
 	VMM();
 	char* pageIn();
 	void pageFaultRoutine(int);
-	void processInput(int);
+	void processInput(unsigned int);
 	int findFreeFrame();
 	void printResults();
 }; 

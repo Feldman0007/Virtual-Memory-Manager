@@ -5,11 +5,13 @@
 #include "TLBReplacementAlgorithm.h"
 /*
 ----------------------------------------------------------- Translation look-aside buffer -------------------------------------------------------
+Purpose:
+	Improve process' performance. With TLB, process runs faster than without it.
 Role:
-	TLB sotre address space identifiers in each TLB entry -uniquely identifies each process to provide address-soace protection for that process.
+	TLB store address space identifiers in each TLB entry -uniquely identifies each process to provide address-soace protection for that process.
 	TLB has the size of 16 which will store 16 entries 
 
-Responsiblity:
+Responsibilities:
 	TLB will help access to frame number faster. 
 	On a TLB miss, value is loaded into the TLB for faster access next time. 
 	TLB will store a frame number, a page number and a useTime

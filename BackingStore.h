@@ -1,7 +1,8 @@
 #pragma once
 #ifndef BACKINGSTORE_H
 #define BACKINGSTORE_H
-#include "RAM.H"
+#include "RAM.h"
+
 #include <iostream>
 #include <fstream>
 
@@ -10,12 +11,15 @@ using namespace std;
 
 /*
 ------------------------------------------------------------------------------------------ Backing Store ------------------------------------------------------------------------------------------
+The BackingStore class provides methods for reading in data from the binary file BACKING_STORE.bin using a page number to select where in secondary storage to read from.
+BackingStore will be utilized when a page fault occurs, where a frame of data is read into BackingStore's buffer and returned to the calling class object.
+
 Purpose:
-	The Backing Store is an alternative, nonvolotile form of data storage, secondary to volatile main memory. It allows the user to store data that persists until it is overwritten or deleted.
-	When used in conjunction with a memory management system, it enables paging and swapping, which expands the capacity of memory (in the form of virtual memory) that may be requested by a running program.
+	The Backing Store is an alternative, nonvolatile form of data storage, as opposed to volatile main memory. It allows the user to store data that persists until it is overwritten or deleted.
+	When used in conjunction with a virtual memory management system, it enables paging and swapping techniques, which extend the capacity of memory that may be accessed by a running program.
 Role:
-	Backing store enables the paging process in our memory management program. We use page numbers to index into and retrieve data from the backing store, which we then transfer to physical memory. The
-	Backing store is used when a process requests a page of data that has not yet been loaded into physical memory (page fault). By paging that data we load it into RAM.
+	The backing store enables virtual memory via the paging technique. 
+	The backing store stores data that can be retrieved and loaded into physical memory during a page fault.
 
 Responsibilities:
 	Backing store will use default constructor to open the BackingStore.bin and make sure that it is being open properly
@@ -28,10 +32,10 @@ Responsibilities:
 class BackingStore {
 private: 
 	ifstream binaryFileReader;
-	char dataBuffer[FRAME_SIZE];
+	char dataBuffer[FRAME_SIZE] = { 0 };
 public:
 	BackingStore();
 	~BackingStore();
-	char * read(int);
+	char * read(uint32_t pageNum);
 };
 #endif

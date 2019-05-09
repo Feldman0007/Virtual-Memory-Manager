@@ -1,11 +1,10 @@
 #pragma once
 #ifndef RAM_H
 #define RAM_H
-#define FRAME_SIZE 256
-#define RAM_SIZE 128
 
 #include <iostream>
 #include <iomanip>
+#include "Configuration.hpp"
 
 using namespace std;
 
@@ -26,15 +25,9 @@ Responsiblity
 */
 
 struct Status {
-	bool accessed;
-	bool dirty;
-	int useTime; //used in LRU algorithm
-
-	Status() {
-		accessed = false;
-		dirty = false;
-		useTime = 0;
-	}
+	bool accessed = false;
+	bool dirty = false;
+	uint32_t useTime = 0; //used in LRU algorithm
 };
 
 class RAM {
@@ -42,9 +35,9 @@ private:
 	char physicalMemory[RAM_SIZE][FRAME_SIZE];														 //volatile memory
 	Status frameStatuses[RAM_SIZE];																	 //parallel array storing status information for each frame.
 public:
-	void store(int, char *);																		 //store a frame of data in ram; from the backing store
-	int accessRAM(int, int);																		 //access RAM using physical address and return byte of data
-	int getUseTime(int);
+	void store(uint32_t frameNum, char* frameOfData);												 //store a frame of data in ram; from the backing store
+	char accessRAM(uint32_t frameNumber, uint32_t frameOffset);										 //access RAM using physical address and return byte of data
+	uint32_t getUseTime(uint32_t frameNumber);
 };
 
 #endif

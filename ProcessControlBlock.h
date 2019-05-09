@@ -1,10 +1,9 @@
 #pragma once
-#define PAGE_TABLE_SIZE 256
-#define PAGE_SIZE 256
 #ifndef PROCESSCONTROLBLOCK_H
 #define PROCESSCONTROLBLOCK_H
 
 #include <iostream>
+#include "Configuration.hpp"
 #include "Address.h"
 
 using namespace std;
@@ -34,17 +33,14 @@ Responsiblity
 */
 
 struct PageTableEntry {
-	int frameNumber;
-	bool valid_invalid_bit;
+	uint32_t frameNumber = 0;
+	bool valid_invalid_bit = false;
 	
-	PageTableEntry() {
-		valid_invalid_bit = false; // initially false (invalid) = we have not yet loaded any pages into physical memory
-	}
-	void updatePageEntry(int frame) {
+	void updatePageEntry(uint32_t frame) {
 		frameNumber = frame;
 		valid_invalid_bit = true;
 	}
-	int getFrameNumber() {
+	uint32_t getFrameNumber() {
 		return frameNumber;
 	}
 	bool getValidBit() {
@@ -55,7 +51,8 @@ struct PageTableEntry {
 class ProcessControlBlock {
 private:
 	PageTableEntry pageTable[PAGE_TABLE_SIZE];
-/*						Many other members that aren't in the scope of the project such as:
+/* 
+	Many other members that aren't in the scope of the project such as:
 	ProcessState state;
 	ProgramCounter prgmCounter;
 	CPUSchedulingInfo scheduleInfo;
@@ -66,10 +63,10 @@ private:
 	memory limits, list of open files, ect....
 */
 public:
-	bool pageTableLookup(int);
-	int getFrame(int);
-	PageTableEntry getEntry(int);
-	void updatePageTable(int, int);
-	void invalidate_PT_Entries(int);
+	bool pageTableLookup(uint32_t pageNum);
+	uint32_t getFrame(uint32_t pageNum);
+	PageTableEntry getEntry(uint32_t);
+	void updatePageTable(uint32_t pageNum, uint32_t frameNum);
+	void invalidate_PT_Entries(uint32_t invalidframeNum);
 };
 #endif

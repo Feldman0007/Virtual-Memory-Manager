@@ -9,57 +9,42 @@ using namespace std;
 
 /* 
 ---------------------------------------------------------------------------------- Address Class -----------------------------------------------------------------------------------------------
+The address class houses address information and provides methods for address information retrieval and storage in the program. 
+In the program, we create an instance of Address in the MMU to store address information involved with the current page request. 
+It will be passed to components of the VMM system require address information
+
 Purpose:
-	The address class is responsible for housing address information 
+	Addresses are used in a Memory Management systems to access/store data from main memory and secondary storage.  
 Role:
-	In the program, we create an instance of addresses to store the current address involved in the page request. 
-	It will be passed to components of the VMM system that need access to address information
+	Represents a location in memory.
+	Provides an entry point for access and storage of information.
+
 Responsibilities:
-	The Address class in this case stores logical address information, such as Page Number (p) and Page Offset (d) that will be used in the construction of a physical address in the program.
-	The Address can be used to store and retrieve address information.
+	Addresses store address information, including page number (p) and page offset (d).
 -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 */
 
 struct Word {
 	uint32_t value;
+	void setValue(uint32_t address) {
+		value = address;
+	}
 };
-
 
 class Address {
 private:
-	int pageNumber;
-	int pageOffset;	
-	int logicalAddress;
+	Word pageNumber;
+	Word pageOffset;	
+	Word logicalAddress;
 
 public:
-	void setLogicalAddress(unsigned int);
-	void setPage(unsigned int);
-	void setDisplacement(unsigned int);	
+	void setLogicalAddress(uint32_t intAddr);
+	void setPage(uint32_t pageN);
+	void setDisplacement(uint32_t displacement);
 	
-	int getAddress();
-	int getPage();
-	int getDispacement();	
+	uint32_t getAddress();
+	uint32_t getPage();
+	uint32_t getDispacement();
 };
 
 #endif
-/*
-Word Address::page() const
-
-{
-	constexpr Word bitMask = { Hardware::PAGES - 1 };											// some middle M bits of the word is the page index.
-
-	return { (value_ >> Hardware::DISPACEMENT_EXTENT) & bitMask.value_ };						// move into position and mask off the top bits
-}
-
-void Address::page(const Word & pageNumber)
-
-{
-	constexpr Word bitMask = { (Hardware::PAGES - 1) << Hardware::DISPACEMENT_EXTENT };
-
-
-	value_ &= ~bitMask.value_;																	// zero out the target page bits in value
-
-	value_ |= bitMask.value_ & (pageNumber.value_ << Hardware::DISPACEMENT_EXTENT);				// move the target bits from offset into value_
-
-}
-*/

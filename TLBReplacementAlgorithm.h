@@ -1,8 +1,8 @@
 #pragma once
 #ifndef TLBREPLACEMENTALGORITHM_H
 #define TLBREPLACEMENTALGORITHM_H
+#include "Configuration.hpp"
 
-#define TLB_REPLACE 0 //1 for for tlb replacement using lru, 0 for FIFO
 #include <queue>
 
 using namespace std;
@@ -28,9 +28,9 @@ class TLBReplacementAlgorithm {
 private:
 	queue<int> tlbQueue;																//queue of index numbers
 public:
-	void enqueue(int);
-	int dequeue();																		//return index to remove from tlb
-	int LRUreplace(TLBEntry *);
-	int FIFOreplace();
+	void enqueue(uint32_t value);
+	uint32_t dequeue();																		//return index to remove from tlb
+	uint32_t LRUreplace(TLBEntry * tlb);
+	uint32_t FIFOreplace();
 };
 #endif

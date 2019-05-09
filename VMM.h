@@ -1,47 +1,36 @@
 #pragma once
 #ifndef VMM_H
 #define VMM_H
+
+#include <iomanip>
 #include "Address.h"
 #include "MMU.h"
 #include "ProcessControlBlock.h"
 #include "RAM.h"
 #include "BackingStore.h"
 #include "PageReplacementAlgorithm.h"
-#include <iomanip>
+
 
 /*
 ------------------------------------------------------------------------------ Virtual Memory Manager ----------------------------------------------------------------------------------------
-Virtual Memory Manager is our over arching class that includes most of the working pieces of a virtual memory management system.
-VMM includes : 
-				MMU (which contains the TLB)
-				Process Control Block (which contains the Page Table)
-				Backing Store
-				RAM
-				Free Frames List
+	Virtual Memory Manager is our over arching class that includes many of the working pieces of a virtual memory management system including the MMU, backing store, RAM,
+	free frames list, and PCBs (containing Page Tables associated with the processes that are requesting pages of data).
+	The primary function of VMM, pageRequest, simulates the process of satisfying a request for a page of data. (See implementation and additional comments in VMM.cpp)
+
 Purpose:
-	Virtual Memory allows a system to run programs in a way that minimizes the ammount of physical memory consumed. Memory that appears to exist as main storage although 
-	most of it is supported by data held in secondary storage.
+	Virtual Memory Management systems enable virtual memory, which provide running programs with access to large amounts of data from secondary storage while 
+	minimizing the amount of memory that is actually loaded and maintained in physical memory. 
+	Memory that appears to exist as main storage although most of it is supported by data held in secondary storage.
 
 Role:
-	Process input
 	Occupy physical memory with things that are likely to be used
 	Load things in as we need them (demand paging)
+	Satisfy page requests
 
 Responsibilities:
-	Automatically transfer data between main memory and secondary storage. This is accomplished through the translation of logical address to physical address.
-	A logical address is processed by:
-			1) Extracting page number p, so we may use it to index into the page table/TLB and retrieve a frame number f
-			2) Extracting displacement d
-			3) Retreive frame number f from the TLB, or the page table
-				3.1) frame number associated with page Page Fault - page in data and potentially involving a pageFault and the use of a page replacement algorithm to find an available frame)
-			4) Construct a physical address and use that address to locate the and output the value of the byte stored in RAM
-
-	
+	Automatically transfer and maintain data between main memory and secondary storage. 
 ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 */
-
-
-
 
 class VMM {
 private:
@@ -52,12 +41,16 @@ private:
 	bool freeFramesList[RAM_SIZE];
 	PageReplacementAlgorithm algorithm;
 public:
+	
 	VMM();
-	char* pageIn();
-	void pageFaultRoutine(int);
-	void processInput(unsigned int);
-	int findFreeFrame();
+
+	char* pageIn(uint32_t faultingPage);
+	void pageFaultRoutine(uint32_t faultingPage);
+	void servicePageRequest(uint32_t intAddr);
+	uint32_t findFreeFrame();
 	void printResults();
+	void mmu_clearTLB();
+	//void mmu_validateAddressSpace();
 }; 
 
 #endif

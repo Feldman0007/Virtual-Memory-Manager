@@ -1,13 +1,14 @@
 #pragma once
 #ifndef PAGEREPLACEMENTALGORITHM_H
 #define PAGEREPLACEMENTALGORITHM_H
-#define PAGE_REPLACE 0 //1 for page replacement using lru, 0 for FIFO
+#include "Configuration.hpp"
+
 #include <queue>
 
 using namespace std;
 
 /*
------------------------------ Page Replacment Algorithm -------------------------------
+---------------------------------------- Page Replacment Algorithm -----------------------------------
 Purpose:
 	Page replacement allows a VMM recent using data in touch eventhough the RAM is full by replacing.
 Role:
@@ -21,20 +22,19 @@ Responsibilities:
 	First in First out
 		We will be using a queue to store the order of the value going in the the Ram.
 		We will pop the queue according order First in First out
-
----------------------------------------------------------------------------------------
+		
+------------------------------------------------------------------------------------------------------
 */
 
-class RAM;																				//forward declaration
+class RAM;																						//forward declaration
 
 class PageReplacementAlgorithm {
 private:
-	queue<int> pageQueue;																//queue of index numbers
+	queue<int> pageQueue;																		//queue of index numbers
 public:
-	void enqueue(int);
-	int dequeue();																		//return index to remove from page table
-	int LRUreplace(RAM &);
-	int FIFOreplace();
+	void enqueue(uint32_t value);
+	uint32_t dequeue();																			//return index to remove from page table
+	uint32_t LRUreplace(RAM &r);
+	uint32_t FIFOreplace();
 };
 #endif
-

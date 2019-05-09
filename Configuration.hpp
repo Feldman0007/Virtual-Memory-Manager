@@ -1,30 +1,17 @@
 #pragma once
 /**********************************************************************************************************************************
 ** Hardware Configuration Constants
-*********************************************************************************************************************************/
+*********************************************************************************************************************************/       
+//We tried to make some of the Hardware constants derivable from others like you had suggested we do in the email, but we struggled trying to understand your implementation :/
+//We understand this would have been ideal, since it would demonstrated how the hardware constants are related, but we struggle tor replicate your technique (we're unfamiliar with constexpression) 
+#define ADDRESS_MASK 0xFFFF
+#define OFFSET_MASK 0xFF
 
-#include <cstdlib>                  // size_t
-#include "Utilities/Common.hpp"     // exp2()
 
+#define TLB_REPLACE 1 //1 for for tlb replacement using lru, 0 for FIFO
+#define PAGE_REPLACE 0 //1 for page replacement using lru, 0 for FIFO
 
-namespace Hardware
-{
-  using namespace Utilities::Literals;
-
-  // Addressing constants
-  constexpr auto DISPACEMENT_EXTENT  = 8U;                                     // in bits - number of bits in address used to index into a page or frame
-  constexpr auto ADDRESS_EXTENT      = 16U;                                    // in bits - number of bits used for addressing
-  constexpr auto PAGE_EXTENT         = ADDRESS_EXTENT - DISPACEMENT_EXTENT;    // in bits - number of bits used to identify the logical address's page
-  constexpr auto FRAME_EXTENT        = PAGE_EXTENT;                            // in bits - number of bits used to identify the physical address's frame
-
-  // Computer endowment constants
-  constexpr auto TLB_SIZE            = 16U;                                    // in Page Table Entries (PTEs) - number of slots in Translation Lookaside Buffer
-  constexpr auto RAM_SIZE            = 32_KBytes;                              // in bytes - amount of Physical Memory
-                                            
-  // Derived hardware constants             
-  constexpr auto FRAME_SIZE          = Utilities::exp2( DISPACEMENT_EXTENT );  // in bytes - size of a frame
-  constexpr auto FRAMES              = RAM_SIZE / FRAME_SIZE;                  // in frames - number of FRAME_SIZE frames physical memory holds
-  constexpr auto PAGES               = Utilities::exp2( PAGE_EXTENT );         // in Page Table Entries (PTEs) - number of slots in Page Table, one for each page
-
-  static_assert(FRAME_SIZE <= RAM_SIZE, "The size of a physical frame must be a multiple of the RAM size");
-}
+#define FRAME_SIZE 256U
+#define RAM_SIZE 128U
+#define TLB_SIZE 16U
+#define PAGE_TABLE_SIZE 256U

@@ -1,65 +1,53 @@
 #include "MMU.h"
 
-#define ADDRESS_MASK 0xFFFF
-#define OFFSET_MASK 0xFF
-
-MMU::MMU() {
-	int page_access_count_  = 0;
-	int page_in_faults_		= 0;
-	int tlb_access_count_	= 0;
-	int tlb_faults_			= 0;
-}
-
-void MMU::processAddress(unsigned int intAddr) {
-	unsigned int intOffset;
-	unsigned int intPageNum;
-
-	intPageNum = ((intAddr & ADDRESS_MASK) >> 8);						 //mask to get pagenumber 
-	intOffset = intAddr & OFFSET_MASK; 									 //mask to get the offset	
-
-	currentAddress.setDisplacement(intOffset);
-	currentAddress.setPage(intPageNum);
+void MMU::processAddress(uint32_t intAddr) {
 	currentAddress.setLogicalAddress(intAddr);
+	currentAddress.setPage((intAddr & ADDRESS_MASK) >> 8);															//Extract the page number p and use it as an index into the page table
+	currentAddress.setDisplacement(intAddr & OFFSET_MASK); 															//Extract the displacement d that will be used to construct physical address	
 }
 
-void MMU::read_and_print(RAM &r, unsigned int frameNumber, unsigned int frameOffset) {
-	//--Tom  The output doesn't print just one byte when the MSB is set.  By using a signed int as the type for byteOfData, you are
-	//       extending the sign bit across the entire word.  Then when you print it in hex, you et the wrong value printed.  Here
-	//       particular, but generally all the program, avoid signed types and use unsigned types.  Nothing in this entire program
-	//       requires a signed type.
-	int byteOfData = r.accessRAM(frameNumber, frameOffset);						//construct physical address (f + d) and access RAM using this address
+void MMU::read_and_print(RAM &r, uint32_t frameNumber, uint32_t frameOffset) {
+	unsigned int byteOfData = r.accessRAM(frameNumber, frameOffset);
+	cout << " (" << setw(2) << frameNumber << setw(2) << frameOffset << "): " << setw(2) << (byteOfData) << endl;	//output physical address																																			//output byte of data stored in memory at the given physical address
+}
+
+void MMU::trap(bool validBit, uint32_t pgNum) {																		//will the MMU execute a trap? w
+	if (!validBit) {																								//if the valid bit of the page table entry is set to invalid (false)
+		throw pgNum;																								//generate a page fault
+	}
+}
+
+void MMU::clearTLB() {
+	tlb.clear();
+}
+
+/*
+void MMU::validateAddressSpace(){
 	
-	cout << " (" << setw(2) << frameNumber << setw(2) << frameOffset << "): ";				//output physical address
-
-	cout << byteOfData << endl;																//output byte of data stored in memory at the given physical address
 }
-
-void MMU::trap(bool validBit, int pgNum) {																//a trap will be executed if the valid bit of the page table entry is set to invalid (false)
-	if (!validBit) {
-		throw pgNum;
-	}
-	else {
-		return;
-	}
-}
-
-void MMU::storeInRam(RAM &r, int freeFrame, char * frame) {
-	r.store(freeFrame, frame);
+*/
+void MMU::storeInRam(RAM &r, uint32_t freeFrame, char * frameOfData) {
+	r.store(freeFrame, frameOfData);
 }
 
 Address MMU::getAddress(){
 	return currentAddress;
 }
 
-bool MMU::checkTLB(int pageNum) {
+hitStatus MMU::checkTLB(uint32_t pageNum) {
 	return tlb.hit(pageNum);
 }
 
-void MMU::updateTLB(int frameNum, int pageNum) {
-	tlb.update(tlb.findAvailableSpot(), frameNum, pageNum);
+void MMU::updateTLB(uint32_t frameNum, uint32_t pageNum, hitStatus status) {
+	if (status.isHit) {
+		tlb.update(status.indexOfHit, frameNum, pageNum);
+	}
+	else{
+		tlb.update(tlb.findAvailableSpot(), frameNum, pageNum);
+	}
 }
 
-int MMU::tlb_get_frame(int pageNum){
+uint32_t MMU::tlb_get_frame(uint32_t pageNum){
 	return tlb.retrieveFrame(pageNum);
 }
 
@@ -88,11 +76,9 @@ void MMU::calculateTLBRate(){
 }
 
 void MMU::calculatePageFaultRate(){
-	cout << "Page-Fault: " << page_in_faults << endl;					//243
-	cout << "Page-Access_Count: " << page_access_count << endl;			//756 access count
+	cout << "Page-Fault: " << page_in_faults << endl;					
+	cout << "Page-Access_Count: " << page_access_count << endl;			
 
-	
-	float faultRate = (page_in_faults / (float)page_access_count) * 100;	// page_in
+	float faultRate = (page_in_faults / ((float)page_access_count + (float)page_in_faults)) * 100;
 	cout << "Page-Fault Rate: " << faultRate << "%" << endl;
 }
-

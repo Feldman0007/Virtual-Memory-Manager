@@ -1,7 +1,7 @@
 #pragma once
 #ifndef TLB_H
 #define TLB_H
-#define TLB_SIZE 16
+#include "Configuration.hpp"
 #include "TLBReplacementAlgorithm.h"
 /*
 ----------------------------------------------------------- Translation look-aside buffer -------------------------------------------------------
@@ -19,28 +19,26 @@ Responsibilities:
 		-> the one with the most value will be send to Least Recent Use Replacement Algorithm if th3e TLB is full when we are update the TLB. 
 -------------------------------------------------------------------------------------------------------------------------------------------------
 */
+struct hitStatus {
+	bool isHit = false;
+	uint32_t indexOfHit = 999;
+};
+
 struct TLBEntry {
-	int frameNum;									//frame number stored in each tlb entry
-	int pageNum;									//page number stored in each tlb entry
-	bool isAvailable;								//used to determine if this tlb entry is occupied
-	int useTime;									//used in the LRU replacement algorithm
+	uint32_t frameNum;								//frame number stored in each tlb entry, initialized with sentinel values
+	uint32_t pageNum;									//page number stored in each tlb entry,  initialized with sentinel values
+	bool isAvailable;								//used to determine if this tlb entry is occupied, initially available
+	uint32_t useTime;									//used in the LRU replacement algorithm
 	
-	TLBEntry() {
-		frameNum = -999;							//dummy values
-		pageNum = -999;								
-		isAvailable = true;							//initially available
-		useTime = 0;								
-	}
-	void updateTLBEntry(int frame, int pg) {
+	void updateTLBEntry(uint32_t frame, uint32_t pg) {
 		frameNum = frame;							//update frame number
 		pageNum = pg;								//update page number
 		useTime = 0;								//when updating a tlb entry, it is now the most recently used. Reset timer
-		isAvailable = false;						//now occupied, isAvailable marked false.
 	}
-	int getFrame() {
+	uint32_t getFrame() {
 		return frameNum;
 	}
-	int getPage() {
+	uint32_t getPage() {
 		return pageNum;
 	}
 };
@@ -48,15 +46,16 @@ struct TLBEntry {
 class TLB{
 	private:
 		TLBEntry entries[TLB_SIZE];					//entries is an array of TLB entries. 
-		int numTLBEntries;							//counter to keep track of the number of entries in the TLB
+		uint32_t numTLBEntries;							//counter to keep track of the number of entries in the TLB
 		TLBReplacementAlgorithm algorithm;			//fifo or lru tlb entry replacement
 
 	public:
 		TLB();
-		bool hit(int);								//if there is a TLB hit, returns true
-		int findAvailableSpot();					//returns the first available spot in the tlb. returns sentinel value -1 if tlb is full. 
-		void update(int, int, int);					//adds a page + frame entry to an available spot in the TLB, if TLB is full, we execute a replacement algorithm
-		int retrieveFrame(int);						//get the frame stored at an entry, given the page number
+		hitStatus hit(uint32_t pageNum);															//if there is a TLB hit, returns true
+		uint32_t findAvailableSpot();														//returns the first available spot in the tlb. returns sentinel value 999 if tlb is full. 
+		void update(uint32_t index, uint32_t frameNum, uint32_t pageNum);					//adds a page + frame entry to an available spot in the TLB, if TLB is full, we execute a replacement algorithm
+		uint32_t retrieveFrame(uint32_t pageNum);											//get the frame stored at an entry, given the page number
+		void clear();
 };	
 
 #endif

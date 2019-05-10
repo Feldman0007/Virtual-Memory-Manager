@@ -12,7 +12,7 @@ uint32_t TLBReplacementAlgorithm::LRUreplace(TLBEntry *tlb) {								    //LRU r
 			victim = i;
 		}
 	}
-	return victim;																				//return victim
+	return victim;																				//return victim index
 }
 
 uint32_t TLBReplacementAlgorithm::FIFOreplace() {
@@ -21,16 +21,16 @@ uint32_t TLBReplacementAlgorithm::FIFOreplace() {
 	return victim;																				//return victim
 }
 
-void TLBReplacementAlgorithm::enqueue(uint32_t value) {
-	tlbQueue.push(value);
+void TLBReplacementAlgorithm::enqueue(uint32_t value) {											//add entry to the queue
+	replacementQueue.push(value);
 }
 
-uint32_t TLBReplacementAlgorithm::dequeue() {
-	if (tlbQueue.empty()) {
+uint32_t TLBReplacementAlgorithm::dequeue() {													//pop from queue
+	if (replacementQueue.empty()) {
 		cout << "Error, we are trying to pop an empty queue!";
 		exit(0);
 	}
-	uint32_t victim = tlbQueue.front();															//save tlb index at the front of the queue, this will be our victim
-	tlbQueue.pop();																			//pop the fifo queue
-	return victim;																			//return that index
+	uint32_t victim = replacementQueue.front();													//save tlb index at the front of the queue, this will be our victim
+	replacementQueue.pop();																		//pop the fifo queue
+	return victim;																				//return that index
 }

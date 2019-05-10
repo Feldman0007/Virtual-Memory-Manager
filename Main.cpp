@@ -1,32 +1,29 @@
 #include <iostream>
-#include <fstream>
 #include <string>
 #include "VMM.h"
 
 using namespace std;
 /*
 -----------------------------------------------------------------------Main thread of execution--------------------------------------------------------------------------------------------------------|
-Main.cpp is our program's main thread of execution. Inside main we create an instance of VMM (see vmm.h for description), and pass it all the logical addresses from the input file to be processed.   |
+Main.cpp is our program's main thread of execution. Inside main we create an instance of VMM (see VMM.h for details) and feed it page requests from the current process								   |
 After VMM has processed all page requests, we print the TLB hit rate and Page Fault rate.												        													   |
 -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 */
 
 int main() {
 
-	ifstream fileReader;//remove later
-	fileReader.open("addresses.txt");//remove later
+	VMM virtualMemoryManager;                                             
 
-	VMM virtualMemoryManager;
+/*                                                                                  The next two functions are called through VMM because we need them to execute before we begin to service page requests
+	virtualMemoryManager.mmu_validateAddressSpace();								Assuming we have just switched context to the current process's address space, we must validate address space and flush the TLB before processing requests. This method is commented our because it really isn't in the scope of the project.			*/																		
+	virtualMemoryManager.mmu_clearTLB();
+																				  
 	uint32_t logicalAddress;
-	//virtualMemoryManager.mmu_validateAddressSpace();								//Assuming we have just switched context to the current process's address space, so we must validate before process requests
-	virtualMemoryManager.mmu_clearTLB();											/* Since we've likely performed a context stwitch to the address space of the process currently demanding pages
-																						we should flush the TLB*/
-	while (fileReader >> logicalAddress) {
+	while (cin >> logicalAddress) {
 		virtualMemoryManager.servicePageRequest(logicalAddress);
 	}	
 	
 	virtualMemoryManager.printResults();
-	fileReader.close();
 	
 	exit(0);
 }

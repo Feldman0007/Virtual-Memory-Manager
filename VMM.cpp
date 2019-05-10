@@ -6,7 +6,7 @@ VMM::VMM() {
 	}
 }
 char * VMM::pageIn(uint32_t faultingPage){
-	return backingStore.read(faultingPage);															//fetch data from backingStore 
+	return backingStore.read(faultingPage);																			//fetch data from backingStore 
 }
 
 void VMM::servicePageRequest(uint32_t intAddr) {
@@ -28,14 +28,14 @@ void VMM::servicePageRequest(uint32_t intAddr) {
 			bool valid = pcb.pageTableLookup(pageNum);																//determine if that page's valid bit is marked valid or invalid - page table at index pageNum, return false=available, true=used
 			mmu.trap(valid, pageNum);																				//Have we encountered a page fault? Let the MMU try and determine whether a trap will be generated.
 		}																																																			
-		catch (uint32_t faultingPage) {
+		catch (uint32_t faultingPage) {																				//we have a page fault
 			mmu.update_page_in_faults();																			//increment page fault count
 			pageFaultRoutine(faultingPage);																			//handle page fault
 			return;																									//page fault routine complete, we are done processing this page request
 		}																											//otherwise the frame associated with the page is valid and we can proceed normally
 		mmu.update_page_access_count();																				//increment page access count, we have obtained a valid frame number to access main memory from the page table
 		mmu.read_and_print(ram, pcb.getFrame(pageNum), mmu.getAddress().getDispacement());							//access RAM through the MMU, read in data, and print output using frame number provided by the page table			  
-		mmu.updateTLB(pcb.getFrame(pageNum), pageNum, status);																//update the tlb with the page table entry we just accessed
+		mmu.updateTLB(pcb.getFrame(pageNum), pageNum, status);														//update the tlb with the page table entry we just accessed
 	}		
 }
 
@@ -54,13 +54,13 @@ void VMM::pageFaultRoutine(uint32_t faultingPage) {																	//executinng
 	uint32_t freeFrameNumber = findFreeFrame();																		//select free frame from RAM if available, otherwise return the sentinel value 99
 	
 	hitStatus status;
-	status.indexOfHit = 999;		//at this point we already checked the TLB and determined that it was a miss. We create another instance here because it's a require parameter to update tlb
+	status.indexOfHit = 999; //at this point we already checked the TLB and determined that it was a miss. We create another instance here because it's a require parameter to update tlb
 	status.isHit = false;  
 
 	if (freeFrameNumber == 999U){																					//if RAM is full execute a page replacement algorithm 																		
 		#if (PAGE_REPLACE)																							//if LRU selected
 				uint32_t victim = algorithm.LRUreplace(ram);														//use LRU algorithm to find victim frame	
-				/*if (victim.get_dirtyBit())																		//we need to write it to the backing store before we boot it out of ram
+			  /*if (victim.get_dirtyBit())																		//we need to write it to the backing store before we boot it out of ram
 						if dirty bit marked, we need to write it to the backing store before we boot it out of ram
 						but we do nothing since we aren't writing data in the scope of this project*/
 				pcb.invalidate_PT_Entries(victim);																	//Invalidate the page table entries that still reference the victim frame 
@@ -71,7 +71,7 @@ void VMM::pageFaultRoutine(uint32_t faultingPage) {																	//executinng
 																
 		#else																										//else FIFO selected
 				uint32_t victim = algorithm.FIFOreplace();															//use FIFO algorithm to find victim frame	
-				/*if (victim frame is dirty)																	
+			  /*if (victim frame is dirty)																	
 						if dirty bit marked, we need to write it to the backing store before we boot it out of ram
 						but we do nothing since we aren't writing data in the scope of this project*/
 				pcb.invalidate_PT_Entries(victim);
@@ -95,17 +95,17 @@ void VMM::pageFaultRoutine(uint32_t faultingPage) {																	//executinng
 	}																		
 }
 
-void VMM::printResults() {
+void VMM::printResults() {																							//calculate and print tlb hit rate and page fault rate
 	mmu.calculateTLBRate();
 	mmu.calculatePageFaultRate();
 }
 
-void VMM::mmu_clearTLB() {
+void VMM::mmu_clearTLB() {																							//clear the TLB when we enter a new address space
 	mmu.clearTLB();
 }
 
 /*
-void VMM::validateAddressSpace(){
+void VMM::validateAddressSpace(){ 																					//validate the address space when we enter a new one
 	mmu.validateAddressSpace();
 }
 */
